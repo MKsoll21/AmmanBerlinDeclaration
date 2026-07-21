@@ -13,7 +13,6 @@ import plotly.express as px
 
 from ipywidgets import interact, widgets
 
-from google.colab import files
 
 uploaded = files.upload()
 
@@ -351,7 +350,6 @@ interact(
     )
 );
 
-!pip install streamlit -q
 
 import streamlit as st
 import pandas as pd
@@ -624,7 +622,6 @@ st.caption(
 
 !streamlit run app.py &>/content/log.txt &
 
-!pip install pyngrok -q
 
 from pyngrok import ngrok
 
