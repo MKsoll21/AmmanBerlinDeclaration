@@ -101,16 +101,30 @@ data["Disability Category"] = data["DISABILITY"].apply(disability_category)
 # Sidebar
 # -------------------------
 
+# -------------------------
+# Sidebar
+# -------------------------
+
 st.sidebar.header("Filters")
 
-recipient = st.sidebar.selectbox(
-    "Recipient",
-    ["All"] + sorted(data["Recipient"].dropna().unique())
+recipient_options = sorted(
+    data["Recipient"].dropna().unique()
 )
 
-donor = st.sidebar.selectbox(
+recipient = st.sidebar.multiselect(
+    "Recipient",
+    recipient_options,
+    default=[]
+)
+
+donor_options = sorted(
+    data["Donor"].dropna().unique()
+)
+
+donor = st.sidebar.multiselect(
     "Donor",
-    ["All"] + sorted(data["Donor"].dropna().unique())
+    donor_options,
+    default=[]
 )
 
 if "Sector.1" in data.columns:
@@ -123,21 +137,37 @@ else:
     st.error("No sector column found.")
     st.stop()
 
-sector = st.sidebar.selectbox(
-    "Sector",
-    ["All"] + sorted(data[sector_col].dropna().unique())
+sector_options = sorted(
+    data[sector_col].dropna().unique()
 )
+
+sector = st.sidebar.multiselect(
+    "Sector",
+    sector_options,
+    default=[]
+)
+
+# -------------------------
+# Apply selected filters
+# -------------------------
 
 filtered = data.copy()
 
-if recipient != "All":
-    filtered = filtered[filtered["Recipient"] == recipient]
+if recipient:
+    filtered = filtered[
+        filtered["Recipient"].isin(recipient)
+    ]
 
-if donor != "All":
-    filtered = filtered[filtered["Donor"] == donor]
+if donor:
+    filtered = filtered[
+        filtered["Donor"].isin(donor)
+    ]
 
-if sector != "All":
-    filtered = filtered[filtered[sector_col] == sector]
+if sector:
+    filtered = filtered[
+        filtered[sector_col].isin(sector)
+    ]
+
 
 # -------------------------
 # Results
