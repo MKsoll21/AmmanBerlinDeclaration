@@ -27,6 +27,7 @@ def load_data():
 
 df = load_data()
 
+
 # -------------------------
 # Apply filters
 # -------------------------
@@ -40,6 +41,7 @@ data = data[
     .str.upper()
     .isin(["C", "COMMITMENT"])
 ]
+
 
 # Allowed modalities
 allowed_modalities = [
@@ -64,6 +66,7 @@ data = data[
     .isin(allowed_modalities)
 ]
 
+
 # Exclude sectors
 excluded_sectors = [
     "72010",
@@ -77,8 +80,80 @@ data = data[
     .isin(excluded_sectors)
 ]
 
+
+# -------------------------
+# Sector grouping
+# -------------------------
+
+sector_mapping = {
+
+    # Social sectors
+    "111": "Education",
+    "112": "Education",
+
+    "121": "Health",
+    "122": "Health",
+
+    "130": "Population Policies / Reproductive Health",
+
+    "140": "Water and Sanitation",
+
+    "151": "Governance and Civil Society",
+    "152": "Peace and Security",
+
+    "160": "Other Social Infrastructure",
+
+
+    # Economic infrastructure
+    "210": "Transport and Storage",
+    "220": "Communications",
+    "230": "Energy",
+    "240": "Banking and Financial Services",
+
+
+    # Production sectors
+    "311": "Agriculture",
+    "312": "Forestry",
+    "313": "Fishing",
+
+    "321": "Industry",
+    "322": "Mineral Resources",
+    "323": "Construction",
+
+    "331": "Trade and Tourism",
+
+
+    # Cross-cutting
+    "410": "Environment",
+    "430": "Other Multisector",
+
+
+    # Humanitarian / reconstruction
+    "720": "Humanitarian Assistance",
+    "730": "Reconstruction and Rehabilitation"
+}
+
+
+def assign_sector_group(x):
+    x = str(x)
+
+    for prefix, group in sector_mapping.items():
+        if x.startswith(prefix):
+            return group
+
+    return "Other"
+
+
+data["Sector Group"] = data["SECTOR"].apply(assign_sector_group)
+
+
+
+# -------------------------
 # Disability category
+# -------------------------
+
 def disability_category(x):
+
     if pd.isna(x) or x == "":
         return "Not scored"
 
@@ -95,78 +170,85 @@ def disability_category(x):
 
     return "Not scored"
 
-data["Disability Category"] = data["DISABILITY"].apply(disability_category)
+
+data["Disability Category"] = (
+    data["DISABILITY"]
+    .apply(disability_category)
+)
+
+
 
 # -------------------------
-# Sidebar
-# -------------------------
-
-# -------------------------
-# Sidebar
+# Sidebar filters
 # -------------------------
 
 st.sidebar.header("Filters")
 
+
 recipient_options = sorted(
-    data["Recipient"].dropna().unique()
+    data["Recipient"]
+    .dropna()
+    .unique()
 )
 
 recipient = st.sidebar.multiselect(
     "Recipient",
-    recipient_options,
-    default=[]
+    recipient_options
 )
 
+
 donor_options = sorted(
-    data["Donor"].dropna().unique()
+    data["Donor"]
+    .dropna()
+    .unique()
 )
 
 donor = st.sidebar.multiselect(
     "Donor",
-    donor_options,
-    default=[]
+    donor_options
 )
 
-if "Sector.1" in data.columns:
-    sector_col = "Sector.1"
-elif "Sector" in data.columns:
-    sector_col = "Sector"
-elif "Sector name" in data.columns:
-    sector_col = "Sector name"
-else:
-    st.error("No sector column found.")
-    st.stop()
 
 sector_options = sorted(
-    data[sector_col].dropna().unique()
+    data["Sector Group"]
+    .dropna()
+    .unique()
 )
 
 sector = st.sidebar.multiselect(
-    "Sector",
-    sector_options,
-    default=[]
+    "Sector Group",
+    sector_options
 )
 
+
+
 # -------------------------
-# Apply selected filters
+# Apply selections
 # -------------------------
 
 filtered = data.copy()
 
+
 if recipient:
     filtered = filtered[
-        filtered["Recipient"].isin(recipient)
+        filtered["Recipient"]
+        .isin(recipient)
     ]
+
 
 if donor:
     filtered = filtered[
-        filtered["Donor"].isin(donor)
+        filtered["Donor"]
+        .isin(donor)
     ]
+
 
 if sector:
     filtered = filtered[
-        filtered[sector_col].isin(sector)
+        filtered["Sector Group"]
+        .isin(sector)
     ]
+
 
 
 # -------------------------
@@ -178,32 +260,59 @@ st.metric(
     len(filtered)
 )
 
+
+
+# Disability results
+
 result = (
     filtered["Disability Category"]
     .value_counts()
     .reset_index()
 )
 
-result.columns = ["Category", "Count"]
+result.columns = [
+    "Category",
+    "Count"
+]
 
-result["Percentage"] = (
-    result["Count"] /
-    result["Count"].sum() *
-    100
-).round(1)
 
-fig = px.bar(
-    result,
-    x="Category",
-    y="Count",
-    color="Category",
-    text=result.apply(
-        lambda r: f'{r["Count"]}<br>{r["Percentage"]}%',
-        axis=1
-    ),
-    title="Disability Inclusion Marker"
-)
+if len(result) > 0:
 
-st.plotly_chart(fig, use_container_width=True)
+    result["Percentage"] = (
+        result["Count"] /
+        result["Count"].sum() *
+        100
+    ).round(1)
 
-st.dataframe(result, hide_index=True)
+
+    fig = px.bar(
+        result,
+        x="Category",
+        y="Count",
+        color="Category",
+        text=result.apply(
+            lambda r:
+            f'{r["Count"]}<br>{r["Percentage"]}%',
+            axis=1
+        ),
+        title="Disability Inclusion Marker"
+    )
+
+
+    st.plotly_chart(
+        fig,
+        use_container_width=True
+    )
+
+
+    st.dataframe(
+        result,
+        hide_index=True
+    )
+
+else:
+
+    st.warning(
+        "No data available for selected filters."
+    )
+
