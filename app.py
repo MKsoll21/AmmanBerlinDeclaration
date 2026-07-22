@@ -427,46 +427,39 @@ subsector = st.sidebar.multiselect(
 )
 
 # ---------------------------------------------------
-# ---------------------------------------------------
 # Apply filters
 # ---------------------------------------------------
 
 filtered = data.copy()
 
 
-
 if recipient:
 
     filtered = filtered[
-        filtered["Recipient"]
-        .isin(recipient)
+        filtered["Recipient"].isin(recipient)
     ]
-
 
 
 if donor:
 
     filtered = filtered[
-        filtered["Donor"]
-        .isin(donor)
+        filtered["Donor"].isin(donor)
     ]
-
 
 
 if sector_group:
 
     filtered = filtered[
-        filtered["Sector Group"]
-        .isin(sector_group)
+        filtered["Sector Group"].isin(sector_group)
     ]
-
 
 
 if subsector:
-filtered = filtered[
-        filtered["Subsector"]
-        .isin(subsector)
+
+    filtered = filtered[
+        filtered["Subsector"].isin(subsector)
     ]
+
 
 
 
