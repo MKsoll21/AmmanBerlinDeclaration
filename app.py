@@ -1,16 +1,17 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
-import flag
+
 
 # ---------------------------------------------------
-# Page config
+# Page configuration
 # ---------------------------------------------------
 
 st.set_page_config(
     page_title="Amman-Berlin Declaration",
     layout="wide"
 )
+
 
 st.title("Amman-Berlin Declaration")
 
@@ -19,24 +20,29 @@ st.caption(
     "Each CRS record counted individually."
 )
 
+
 # ---------------------------------------------------
 # Load data
 # ---------------------------------------------------
 
 @st.cache_data
 def load_data():
+
     return pd.read_csv(
         "oecd_data.csv",
         encoding="latin1"
     )
 
+
 df = load_data()
 
+
+
 # ---------------------------------------------------
-# Check required columns
+# Required columns
 # ---------------------------------------------------
 
-required = [
+required_columns = [
     "FLOW_TYPE",
     "MODALITY",
     "SECTOR",
@@ -45,36 +51,64 @@ required = [
     "Donor"
 ]
 
-missing = [c for c in required if c not in df.columns]
+
+missing = [
+    col for col in required_columns
+    if col not in df.columns
+]
+
 
 if missing:
-    st.error(f"Missing columns: {', '.join(missing)}")
+
+    st.error(
+        "Missing columns: "
+        + ", ".join(missing)
+    )
+
     st.stop()
 
+
+
 # ---------------------------------------------------
-# Detect sector column
+# Detect sector name column
 # ---------------------------------------------------
 
-possible_sector_columns = [
+sector_candidates = [
     "Sector.1",
     "Sector",
     "Sector name"
 ]
 
-sector_col = next(
-    (c for c in possible_sector_columns if c in df.columns),
-    None
-)
+
+sector_col = None
+
+
+for col in sector_candidates:
+
+    if col in df.columns:
+
+        sector_col = col
+        break
+
+
 
 if sector_col is None:
-    st.error("No sector column found.")
+
+    st.error(
+        "No sector column found."
+    )
+
     st.stop()
 
+
+
 # ---------------------------------------------------
-# Apply CRS filters
+# CRS filters
 # ---------------------------------------------------
 
 data = df.copy()
+
+
 
 # Commitments only
 
@@ -82,15 +116,20 @@ data = data[
     data["FLOW_TYPE"]
     .astype(str)
     .str.upper()
-    .isin([
-        "C",
-        "COMMITMENT"
-    ])
+    .isin(
+        [
+            "C",
+            "COMMITMENT"
+        ]
+    )
 ]
 
-# Allowed modalities
+
+
+# Modalities
 
 allowed_modalities = [
+
     "A02",
     "B01",
     "B03",
@@ -103,26 +142,35 @@ allowed_modalities = [
     "D01",
     "D02",
     "E01"
+
 ]
 
-modality = (
+
+data["MODALITY"] = (
     data["MODALITY"]
     .astype(str)
     .str.upper()
 )
 
+
+
 data = data[
-    modality.isin(allowed_modalities)
-    | modality.str.startswith("B03")
+    data["MODALITY"]
+    .isin(allowed_modalities)
 ]
 
-# Excluded sectors
+
+
+# Exclude sectors
 
 excluded_sectors = [
+
     "72010",
     "72040",
     "73010"
+
 ]
+
 
 data = data[
     ~data["SECTOR"]
@@ -130,70 +178,80 @@ data = data[
     .isin(excluded_sectors)
 ]
 
+
+
 # ---------------------------------------------------
-# Sector mapping
+# Sector grouping
 # ---------------------------------------------------
 
 sector_mapping = {
 
-    # Education
+
     "111": "Education",
     "112": "Education",
 
-    # Health
+
     "121": "Health",
     "122": "Health",
 
-    # Population
+
     "130": "Population Policies / Reproductive Health",
 
-    # Water
+
     "140": "Water and Sanitation",
 
-    # Governance
+
     "151": "Governance and Civil Society",
     "152": "Peace and Security",
 
-    # Social
+
     "160": "Other Social Infrastructure",
 
-    # Infrastructure
+
     "210": "Transport and Storage",
     "220": "Communications",
     "230": "Energy",
     "240": "Banking and Financial Services",
 
-    # Production
+
     "311": "Agriculture",
     "312": "Forestry",
     "313": "Fishing",
+
 
     "321": "Industry",
     "322": "Mineral Resources",
     "323": "Construction",
 
+
     "331": "Trade and Tourism",
 
-    # Environment
+
     "410": "Environment",
     "430": "Other Multisector",
 
-    # Humanitarian
+
     "720": "Humanitarian Assistance",
     "730": "Reconstruction and Rehabilitation"
+
 }
 
 
-def assign_sector_group(code):
 
-    code = str(code)
+def assign_sector_group(value):
 
-    for prefix, group in sector_mapping.items():
+    value = str(value)
 
-        if code.startswith(prefix):
-            return group
+
+    for prefix, name in sector_mapping.items():
+
+        if value.startswith(prefix):
+
+            return name
+
 
     return "Other"
+
 
 
 data["Sector Group"] = (
@@ -201,35 +259,47 @@ data["Sector Group"] = (
     .apply(assign_sector_group)
 )
 
-# Detailed subsector
+
 
 data["Subsector"] = (
     data[sector_col]
     .fillna(data["SECTOR"])
 )
-
 # ---------------------------------------------------
 # Disability category
 # ---------------------------------------------------
 
-def disability_category(x):
+def disability_category(value):
 
-    if pd.isna(x) or x == "":
+    if pd.isna(value) or str(value).strip() == "":
+
         return "Not scored"
+
 
     try:
-        x = int(x)
+
+        value = int(value)
 
     except:
+
         return "Not scored"
 
-    if x == 0:
+
+
+    if value == 0:
+
         return "Scored - not targeted"
 
-    if x in [1, 2]:
+
+
+    if value in [1, 2]:
+
         return "Targeted"
 
+
+
     return "Not scored"
+
 
 
 data["Disability Category"] = (
@@ -237,36 +307,45 @@ data["Disability Category"] = (
     .apply(disability_category)
 )
 
+
+
 # ---------------------------------------------------
 # Country flags
 # ---------------------------------------------------
 
 country_flags = {
 
-    "Jordan": "JO",
-    "Lebanon": "LB",
-    "Syrian Arab Republic": "SY",
-    "Syria": "SY",
-    "Iraq": "IQ",
-    "Egypt": "EG",
-    "Türkiye": "TR",
-    "Turkey": "TR",
-    "Germany": "DE",
-    "Ukraine": "UA",
-    "Palestinian Adm. Areas": "PS",
-    "West Bank and Gaza Strip": "PS",
-    "Yemen": "YE",
-    "Libya": "LY",
-    "Tunisia": "TN",
-    "Morocco": "MA",
-    "Algeria": "DZ"
+    "Jordan": "🇯🇴",
+    "Lebanon": "🇱🇧",
+    "Syrian Arab Republic": "🇸🇾",
+    "Syria": "🇸🇾",
+    "Iraq": "🇮🇶",
+    "Egypt": "🇪🇬",
+    "Türkiye": "🇹🇷",
+    "Turkey": "🇹🇷",
+    "Germany": "🇩🇪",
+    "Ukraine": "🇺🇦",
+    "Palestinian Adm. Areas": "🇵🇸",
+    "West Bank and Gaza Strip": "🇵🇸",
+    "Yemen": "🇾🇪",
+    "Libya": "🇱🇾",
+    "Tunisia": "🇹🇳",
+    "Morocco": "🇲🇦",
+    "Algeria": "🇩🇿"
+
 }
 
+
+
 # ---------------------------------------------------
-# Sidebar
+# Sidebar filters
 # ---------------------------------------------------
 
-st.sidebar.header("Filters")
+st.sidebar.header(
+    "Filters"
+)
+
+
 
 # Recipient
 
@@ -276,10 +355,14 @@ recipient_options = sorted(
     .unique()
 )
 
+
+
 recipient = st.sidebar.multiselect(
     "Recipient",
     recipient_options
 )
+
+
 
 # Donor
 
@@ -289,10 +372,14 @@ donor_options = sorted(
     .unique()
 )
 
+
+
 donor = st.sidebar.multiselect(
     "Donor",
     donor_options
 )
+
+
 
 # Sector Group
 
@@ -302,30 +389,36 @@ sector_group_options = sorted(
     .unique()
 )
 
+
+
 sector_group = st.sidebar.multiselect(
     "Sector Group",
     sector_group_options
 )
 
-# Dynamic subsectors
 
-# Dynamic subsectors
 
-subsector_data = data.copy()
+# Subsector dynamic filter
+
+subsector_source = data.copy()
+
+
 
 if sector_group:
 
-    subsector_data = subsector_data[
-        subsector_data["Sector Group"]
+    subsector_source = subsector_source[
+        subsector_source["Sector Group"]
         .isin(sector_group)
     ]
 
 
+
 subsector_options = sorted(
-    subsector_data["Subsector"]
+    subsector_source["Subsector"]
     .dropna()
     .unique()
 )
+
 
 
 subsector = st.sidebar.multiselect(
@@ -333,11 +426,14 @@ subsector = st.sidebar.multiselect(
     subsector_options
 )
 
-    # ---------------------------------------------------
+# ---------------------------------------------------
+# ---------------------------------------------------
 # Apply filters
 # ---------------------------------------------------
 
 filtered = data.copy()
+
+
 
 if recipient:
 
@@ -345,6 +441,7 @@ if recipient:
         filtered["Recipient"]
         .isin(recipient)
     ]
+
 
 
 if donor:
@@ -355,6 +452,7 @@ if donor:
     ]
 
 
+
 if sector_group:
 
     filtered = filtered[
@@ -363,81 +461,98 @@ if sector_group:
     ]
 
 
-if subsector:
 
-    filtered = filtered[
+if subsector:
+filtered = filtered[
         filtered["Subsector"]
         .isin(subsector)
     ]
 
 
+
 # ---------------------------------------------------
-# Display selected country flag
+# Country flag display
 # ---------------------------------------------------
 
 if len(recipient) == 1:
 
     selected_country = recipient[0]
 
+
     if selected_country in country_flags:
 
         st.subheader(
-            f"{flag.flag(country_flags[selected_country])} "
+            f"{country_flags[selected_country]} "
             f"{selected_country}"
         )
+
 
 
 # ---------------------------------------------------
 # Metrics
 # ---------------------------------------------------
 
-total_commitments = len(filtered)
+total_records = len(filtered)
 
-targeted_commitments = (
+
+
+targeted_records = (
     filtered["Disability Category"]
     ==
     "Targeted"
 ).sum()
 
 
-col1, col2, col3 = st.columns(3)
 
+if total_records > 0:
 
-col1.metric(
-    "CRS commitments analysed",
-    total_commitments
-)
-
-
-col2.metric(
-    "Targeted commitments",
-    targeted_commitments
-)
-
-
-if total_commitments > 0:
-
-    percentage = (
-        targeted_commitments
+    targeted_percentage = (
+        targeted_records
         /
-        total_commitments
+        total_records
         *
         100
     )
 
 else:
 
-    percentage = 0
+    targeted_percentage = 0
 
 
-col3.metric(
-    "Targeted share",
-    f"{percentage:.1f}%"
-)
+
+col1, col2, col3 = st.columns(3)
+
+
+
+with col1:
+
+    st.metric(
+        "CRS commitments analysed",
+        total_records
+    )
+
+
+
+with col2:
+
+    st.metric(
+        "Targeted commitments",
+        targeted_records
+    )
+
+
+
+with col3:
+
+    st.metric(
+        "Targeted share",
+        f"{targeted_percentage:.1f}%"
+    )
+
 
 
 # ---------------------------------------------------
-# Disability marker table
+# Disability marker summary
 # ---------------------------------------------------
 
 result = (
@@ -455,10 +570,18 @@ result = (
 )
 
 
+
 result.columns = [
+
     "Category",
     "Count"
+
 ]
+
+
+
+result["Percentage"] = 0.0
+
 
 
 if result["Count"].sum() > 0:
@@ -472,44 +595,71 @@ if result["Count"].sum() > 0:
     ).round(1)
 
 # ---------------------------------------------------
-# Disability chart
+# Disability Inclusion Chart
 # ---------------------------------------------------
 
 if result["Count"].sum() > 0:
 
+
     fig = px.bar(
+
         result,
+
         x="Category",
+
         y="Count",
+
         color="Category",
 
+
         category_orders={
+
             "Category": [
+
                 "Not scored",
+
                 "Scored - not targeted",
+
                 "Targeted"
+
             ]
+
         },
 
+
         text=result.apply(
-            lambda r:
-            f'{r["Count"]}<br>{r["Percentage"]}%',
+
+            lambda row:
+            f'{row["Count"]}<br>{row["Percentage"]}%',
+
             axis=1
+
         ),
+
 
         title="Disability Inclusion Marker",
 
+
         color_discrete_map={
+
             "Not scored": "#BDBDBD",
+
             "Scored - not targeted": "#4C78A8",
+
             "Targeted": "#2CA02C"
+
         }
+
     )
+
 
 
     fig.update_traces(
+
         textposition="outside"
+
     )
+
 
 
     fig.update_layout(
@@ -527,10 +677,15 @@ if result["Count"].sum() > 0:
     )
 
 
+
     st.plotly_chart(
+
         fig,
+
         use_container_width=True
+
     )
+
 
 
     # ---------------------------------------------------
@@ -542,11 +697,17 @@ if result["Count"].sum() > 0:
     )
 
 
+
     st.dataframe(
+
         result,
+
         hide_index=True,
+
         use_container_width=True
+
     )
+
 
 
     # ---------------------------------------------------
@@ -558,19 +719,26 @@ if result["Count"].sum() > 0:
         label="Download filtered CRS data",
 
         data=filtered.to_csv(
+
             index=False
+
         ).encode("utf-8"),
 
+
         file_name="filtered_oecd_crs_data.csv",
+
 
         mime="text/csv"
 
     )
 
 
+
 else:
 
-    st.warning(
-        "No data available for selected filters."
-    )
 
+    st.warning(
+
+        "No data available for selected filters."
+
+    )
