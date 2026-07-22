@@ -309,6 +309,8 @@ sector_group = st.sidebar.multiselect(
 
 # Dynamic subsectors
 
+# Dynamic subsectors
+
 subsector_data = data.copy()
 
 if sector_group:
@@ -318,14 +320,18 @@ if sector_group:
         .isin(sector_group)
     ]
 
+
 subsector_options = sorted(
     subsector_data["Subsector"]
     .dropna()
     .unique()
 )
 
+
 subsector = st.sidebar.multiselect(
     "Subsector",
+    subsector_options
+)
 
     # ---------------------------------------------------
 # Apply filters
