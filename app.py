@@ -29,9 +29,9 @@ st.caption(
 def load_data():
 
     return pd.read_csv(
-        "oecd_data.csv",
-        encoding="latin1"
-    )
+    "oecd_data.csv",
+    encoding="utf-8-sig"
+)
 
 
 df = load_data()
