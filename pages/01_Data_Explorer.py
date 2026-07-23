@@ -694,15 +694,7 @@ recipient_sector_table = create_pair_ranking(
 
 def style_table(df):
 
-    return (
-        df.style
-        .background_gradient(
-            subset=[
-                "Commitments"
-            ],
-            cmap="Blues"
-        )
-    )
+    return df
 
 # ---------------------------------------------------
 # Display tables
