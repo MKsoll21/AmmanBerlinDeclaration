@@ -121,6 +121,7 @@ for col in ["Recipient", "Donor"]:
         .str.strip()
     )
 
+data[col] = data[col].str.replace("Ã¼", "ü", regex=False)
 
 name_mapping = {
 
@@ -561,19 +562,23 @@ recipient_options = sorted(
     .unique()
 )
 
+
 if endorsing_recipients:
 
-    st.session_state["recipient_filter"] = [
+    default_recipients = [
         x for x in recipient_options
-        if x.strip() in amman_berlin_recipient_endorsers
+        if x in amman_berlin_recipient_endorsers
     ]
 
+else:
+
+    default_recipients = []
 
 
 recipient = st.sidebar.multiselect(
     "Recipient",
     recipient_options,
-    key="recipient_filter"
+    default=default_recipients
 )
 
 
