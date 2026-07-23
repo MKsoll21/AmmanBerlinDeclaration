@@ -534,21 +534,23 @@ recipient_options = sorted(
 
 if endorsing_recipients:
 
-    default_recipients = [
+    recipient_default = [
         x for x in recipient_options
-        if x in amman_berlin_recipient_endorsers
+        if x.strip() in amman_berlin_recipient_endorsers
     ]
 
 else:
 
-    default_recipients = []
+    recipient_default = []
 
 
 recipient = st.sidebar.multiselect(
     "Recipient",
     recipient_options,
-    default=default_recipients
+    default=recipient_default,
+    key="recipient_filter"
 )
+
 
 
 
