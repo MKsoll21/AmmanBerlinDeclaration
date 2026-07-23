@@ -108,16 +108,20 @@ if sector_col is None:
 
 data = df.copy()
 
-# Ausnahme: OECD CRS nutzt Palestinian Territories
-# Dashboard soll aber Palestine anzeigen
+# ---------------------------------------------------
+# OECD recipient name harmonisation
+# ---------------------------------------------------
+
 data["Recipient"] = (
     data["Recipient"]
     .replace(
         {
-            "Palestinian Territories": "Palestine"
+            "Palestinian Territories": "Palestine",
+            "Palestinian Authority or West Bank and Gaza Strip": "Palestine"
         }
     )
 )
+
 
 # Commitments only
 
