@@ -344,7 +344,12 @@ country_flags = {
 
 }
 
-amman_berlin_endorsers = [
+# ---------------------------------------------------
+# Amman-Berlin Declaration endorsers
+# OECD CRS naming convention
+# ---------------------------------------------------
+
+amman_berlin_recipient_endorsers = [
 
     "Algeria",
     "Andorra",
@@ -421,24 +426,74 @@ amman_berlin_endorsers = [
     "United Kingdom",
     "Uruguay",
     "Zambia",
-    "Zimbabwe",
-
-    "African Union Commission",
-    "European Commission",
-    "FAO",
-    "IFAD",
-    "ILO",
-    "IOM",
-    "UNDP",
-    "UNICEF",
-    "UNHCR",
-    "UN Women",
-    "WHO",
-    "WFP",
-    "UNESCO"
+    "Zimbabwe"
 
 ]
 
+
+amman_berlin_donor_endorsers = [
+
+    "Algeria",
+    "Australia",
+    "Austria",
+    "Belgium",
+    "Canada",
+    "Denmark",
+    "Finland",
+    "France",
+    "Germany",
+    "Ireland",
+    "Italy",
+    "Japan",
+    "Korea",
+    "Kuwait",
+    "Netherlands",
+    "New Zealand",
+    "Norway",
+    "Portugal",
+    "Qatar",
+    "Spain",
+    "Sweden",
+    "Türkiye",
+    "United Arab Emirates",
+    "United Kingdom",
+    "United States",
+
+    # OECD CRS donor institutions
+
+    "Caribbean Development Bank [CarDB]",
+
+    "Development Bank of Latin America [CAF]",
+
+    "EU Institutions",
+
+    "Food and Agriculture Organisation [FAO]",
+
+    "Inter-American Development Bank [IDB]",
+
+    "International Labour Organisation [ILO]",
+
+    "International Fund for Agricultural Development [IFAD]",
+
+    "International Organization for Migration [IOM]",
+
+    "United Nations Development Programme [UNDP]",
+
+    "United Nations Population Fund [UNFPA]",
+
+    "United Nations Children's Fund [UNICEF]",
+
+    "United Nations High Commissioner for Refugees [UNHCR]",
+
+    "United Nations Entity for Gender Equality and the Empowerment of Women [UN Women]",
+
+    "World Food Programme [WFP]",
+
+    "World Health Organisation [WHO]",
+
+    "Food and Agriculture Organization [FAO]"
+
+]
 
 
 # ---------------------------------------------------
@@ -481,6 +536,7 @@ if endorsing_recipients:
         if x in amman_berlin_endorsers
     ]
 
+
 else:
 
     default_recipients = []
@@ -503,17 +559,17 @@ donor_options = sorted(
 )
 
 
-
 if endorsing_donors:
 
     default_donors = [
         x for x in donor_options
-        if x in amman_berlin_endorsers
+        if x in amman_berlin_donor_endorsers
     ]
 
 else:
 
     default_donors = []
+
 
 
 donor = st.sidebar.multiselect(
