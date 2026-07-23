@@ -30,8 +30,9 @@ def load_data():
 
     return pd.read_csv(
     "oecd_data.csv",
-    encoding="cp1252"
+    encoding="utf-8-sig"
 )
+
 
 
 df = load_data()
@@ -115,13 +116,15 @@ data = df.copy()
 
 for col in ["Recipient", "Donor"]:
 
+    for col in ["Recipient", "Donor"]:
+
     data[col] = (
         data[col]
         .astype(str)
         .str.strip()
+        .str.replace("Ã¼", "ü", regex=False)
     )
 
-data[col] = data[col].str.replace("Ã¼", "ü", regex=False)
 
 name_mapping = {
 
