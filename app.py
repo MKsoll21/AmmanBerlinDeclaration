@@ -528,14 +528,12 @@ recipient_options = sorted(
 )
 
 
-
 if endorsing_recipients:
 
     default_recipients = [
         x for x in recipient_options
-        if x in amman_berlin_endorsers
+        if x in amman_berlin_recipient_endorsers
     ]
-
 
 else:
 
