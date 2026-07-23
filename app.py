@@ -30,7 +30,7 @@ def load_data():
 
     return pd.read_csv(
     "oecd_data.csv",
-    encoding="utf-8-sig"
+    encoding="cp1252"
 )
 
 
@@ -115,20 +115,15 @@ data = df.copy()
 
 data["Recipient"] = (
     data["Recipient"]
-    .astype(str)
-    .str.strip()
-)
-
-
-data["Recipient"] = (
-    data["Recipient"]
     .replace(
         {
-            "Palestinian Territories": "Palestine",
+            "TÃ¼rkiye": "Türkiye",
+            "Turkey": "Türkiye",
             "Palestinian Authority or West Bank and Gaza Strip": "Palestine"
         }
     )
 )
+
 
 
 
