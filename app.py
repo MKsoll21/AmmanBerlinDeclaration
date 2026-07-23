@@ -116,8 +116,6 @@ data = df.copy()
 
 for col in ["Recipient", "Donor"]:
 
-    for col in ["Recipient", "Donor"]:
-
     data[col] = (
         data[col]
         .astype(str)
@@ -128,12 +126,9 @@ for col in ["Recipient", "Donor"]:
 
 name_mapping = {
 
-    # Türkiye
     "TÃ¼rkiye": "Türkiye",
-    "TÃ¼rkiye ": "Türkiye",
     "Turkey": "Türkiye",
 
-    # Palestine
     "Palestinian Authority or West Bank and Gaza Strip": "Palestine",
     "West Bank and Gaza Strip": "Palestine",
     "Palestinian Territories": "Palestine",
@@ -146,6 +141,13 @@ data["Recipient"] = (
     data["Recipient"]
     .replace(name_mapping)
 )
+
+
+data["Donor"] = (
+    data["Donor"]
+    .replace(name_mapping)
+)
+
 
 
 data["Donor"] = (
