@@ -108,9 +108,17 @@ if sector_col is None:
 
 data = df.copy()
 
+
 # ---------------------------------------------------
 # OECD recipient name harmonisation
 # ---------------------------------------------------
+
+data["Recipient"] = (
+    data["Recipient"]
+    .astype(str)
+    .str.strip()
+)
+
 
 data["Recipient"] = (
     data["Recipient"]
@@ -121,6 +129,7 @@ data["Recipient"] = (
         }
     )
 )
+
 
 
 # Commitments only
@@ -534,24 +543,17 @@ recipient_options = sorted(
 
 if endorsing_recipients:
 
-    recipient_default = [
+    st.session_state["recipient_filter"] = [
         x for x in recipient_options
-        if x.strip() in amman_berlin_recipient_endorsers
+        if x in amman_berlin_recipient_endorsers
     ]
-
-else:
-
-    recipient_default = []
 
 
 recipient = st.sidebar.multiselect(
     "Recipient",
     recipient_options,
-    default=recipient_default,
     key="recipient_filter"
 )
-
-
 
 
 # Donor
