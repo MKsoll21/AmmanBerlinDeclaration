@@ -108,7 +108,16 @@ if sector_col is None:
 
 data = df.copy()
 
-
+# Ausnahme: OECD CRS nutzt Palestinian Territories
+# Dashboard soll aber Palestine anzeigen
+data["Recipient"] = (
+    data["Recipient"]
+    .replace(
+        {
+            "Palestinian Territories": "Palestine"
+        }
+    )
+)
 
 # Commitments only
 
@@ -335,6 +344,101 @@ country_flags = {
 
 }
 
+amman_berlin_endorsers = [
+
+    "Algeria",
+    "Andorra",
+    "Armenia",
+    "Australia",
+    "Bahamas",
+    "Bahrain",
+    "Benin",
+    "Bosnia and Herzegovina",
+    "Botswana",
+    "Brazil",
+    "Cabo Verde",
+    "Cambodia",
+    "Chad",
+    "Colombia",
+    "Democratic Republic of the Congo",
+    "Croatia",
+    "Denmark",
+    "Dominican Republic",
+    "Djibouti",
+    "Ecuador",
+    "Egypt",
+    "Finland",
+    "France",
+    "Germany",
+    "Ghana",
+    "Guatemala",
+    "Guinea",
+    "Haiti",
+    "Honduras",
+    "Iceland",
+    "Iraq",
+    "Ireland",
+    "Italy",
+    "Jamaica",
+    "Jordan",
+    "Kazakhstan",
+    "Kenya",
+    "Korea",
+    "Kuwait",
+    "Liberia",
+    "Libya",
+    "Malawi",
+    "Mauritania",
+    "Mexico",
+    "Moldova",
+    "Mongolia",
+    "Morocco",
+    "New Zealand",
+    "Nigeria",
+    "North Macedonia",
+    "Norway",
+    "Oman",
+    "Pakistan",
+    "Palestine",
+    "Paraguay",
+    "Peru",
+    "Poland",
+    "Portugal",
+    "Qatar",
+    "Romania",
+    "Sao Tome and Principe",
+    "Sierra Leone",
+    "Slovenia",
+    "Somalia",
+    "South Africa",
+    "Spain",
+    "Sweden",
+    "Tanzania",
+    "Togo",
+    "Türkiye",
+    "Ukraine",
+    "United Arab Emirates",
+    "United Kingdom",
+    "Uruguay",
+    "Zambia",
+    "Zimbabwe",
+
+    "African Union Commission",
+    "European Commission",
+    "FAO",
+    "IFAD",
+    "ILO",
+    "IOM",
+    "UNDP",
+    "UNICEF",
+    "UNHCR",
+    "UN Women",
+    "WHO",
+    "WFP",
+    "UNESCO"
+
+]
+
 
 
 # ---------------------------------------------------
@@ -345,6 +449,19 @@ st.sidebar.header(
     "Filters"
 )
 
+
+# ---------------------------------------------------
+# Amman-Berlin Declaration quick filters
+# ---------------------------------------------------
+
+endorsing_recipients = st.sidebar.checkbox(
+    "Only Amman-Berlin Declaration Recipients"
+)
+
+
+endorsing_donors = st.sidebar.checkbox(
+    "Only Amman-Berlin Declaration Donors"
+)
 
 
 # Recipient
@@ -357,9 +474,22 @@ recipient_options = sorted(
 
 
 
+if endorsing_recipients:
+
+    default_recipients = [
+        x for x in recipient_options
+        if x in amman_berlin_endorsers
+    ]
+
+else:
+
+    default_recipients = []
+
+
 recipient = st.sidebar.multiselect(
     "Recipient",
-    recipient_options
+    recipient_options,
+    default=default_recipients
 )
 
 
@@ -374,11 +504,23 @@ donor_options = sorted(
 
 
 
+if endorsing_donors:
+
+    default_donors = [
+        x for x in donor_options
+        if x in amman_berlin_endorsers
+    ]
+
+else:
+
+    default_donors = []
+
+
 donor = st.sidebar.multiselect(
     "Donor",
-    donor_options
+    donor_options,
+    default=default_donors
 )
-
 
 
 # Sector Group
