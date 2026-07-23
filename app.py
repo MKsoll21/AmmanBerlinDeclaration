@@ -110,20 +110,48 @@ data = df.copy()
 
 
 # ---------------------------------------------------
-# OECD recipient name harmonisation
+# OECD name harmonisation + encoding cleanup
 # ---------------------------------------------------
+
+# Leerzeichen entfernen
+for col in ["Recipient", "Donor"]:
+    data[col] = (
+        data[col]
+        .astype(str)
+        .str.strip()
+    )
+
+
+# Häufige Encoding-Fehler korrigieren
+replacement_map = {
+
+    "TÃ¼rkiye": "Türkiye",
+    "TÃ¼rkiye ": "Türkiye",
+
+    "Turkey": "Türkiye",
+
+    "Palestinian Authority or West Bank and Gaza Strip":
+        "Palestine",
+
+    "Palestinian Territories":
+        "Palestine",
+
+    "West Bank and Gaza Strip":
+        "Palestine"
+
+}
+
 
 data["Recipient"] = (
     data["Recipient"]
-    .replace(
-        {
-            "TÃ¼rkiye": "Türkiye",
-            "Turkey": "Türkiye",
-            "Palestinian Authority or West Bank and Gaza Strip": "Palestine"
-        }
-    )
+    .replace(replacement_map)
 )
 
+
+data["Donor"] = (
+    data["Donor"]
+    .replace(replacement_map)
+)
 
 
 
@@ -535,13 +563,13 @@ recipient_options = sorted(
     .unique()
 )
 
-
 if endorsing_recipients:
 
     st.session_state["recipient_filter"] = [
         x for x in recipient_options
-        if x in amman_berlin_recipient_endorsers
+        if x.strip() in amman_berlin_recipient_endorsers
     ]
+
 
 
 recipient = st.sidebar.multiselect(
