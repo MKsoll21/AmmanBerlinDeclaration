@@ -110,11 +110,11 @@ data = df.copy()
 
 
 # ---------------------------------------------------
-# OECD name harmonisation + encoding cleanup
+# OECD name harmonisation
 # ---------------------------------------------------
 
-# Leerzeichen entfernen
 for col in ["Recipient", "Donor"]:
+
     data[col] = (
         data[col]
         .astype(str)
@@ -122,36 +122,33 @@ for col in ["Recipient", "Donor"]:
     )
 
 
-# Häufige Encoding-Fehler korrigieren
-replacement_map = {
+name_mapping = {
 
+    # Türkiye
     "TÃ¼rkiye": "Türkiye",
     "TÃ¼rkiye ": "Türkiye",
-
     "Turkey": "Türkiye",
 
-    "Palestinian Authority or West Bank and Gaza Strip":
-        "Palestine",
-
-    "Palestinian Territories":
-        "Palestine",
-
-    "West Bank and Gaza Strip":
-        "Palestine"
+    # Palestine
+    "Palestinian Authority or West Bank and Gaza Strip": "Palestine",
+    "West Bank and Gaza Strip": "Palestine",
+    "Palestinian Territories": "Palestine",
+    "Palestinian Adm. Areas": "Palestine"
 
 }
 
 
 data["Recipient"] = (
     data["Recipient"]
-    .replace(replacement_map)
+    .replace(name_mapping)
 )
 
 
 data["Donor"] = (
     data["Donor"]
-    .replace(replacement_map)
+    .replace(name_mapping)
 )
+
 
 
 
@@ -441,6 +438,7 @@ amman_berlin_recipient_endorsers = [
     "Oman",
     "Pakistan",
     "Palestine",
+    "Türkiye",
     "Paraguay",
     "Peru",
     "Poland",
@@ -590,21 +588,21 @@ donor_options = sorted(
 
 if endorsing_donors:
 
-    default_donors = [
+    st.session_state["donor_filter"] = [
         x for x in donor_options
-        if x in amman_berlin_donor_endorsers
+        if x.strip() in amman_berlin_donor_endorsers
     ]
 
 else:
 
-    default_donors = []
+    st.session_state["donor_filter"] = []
 
 
 
 donor = st.sidebar.multiselect(
     "Donor",
     donor_options,
-    default=default_donors
+    key="donor_filter"
 )
 
 
