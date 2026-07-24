@@ -873,13 +873,12 @@ if result["Count"].sum() > 0:
 
     st.divider()
 
-        st.subheader(
+    st.subheader(
         "Disability marker breakdown"
     )
 
     gb = GridOptionsBuilder.from_dataframe(result)
 
-    # Standardformatierung
     gb.configure_default_column(
         resizable=True,
         sortable=True,
@@ -889,7 +888,6 @@ if result["Count"].sum() > 0:
         }
     )
 
-    # Category linksbündig
     gb.configure_column(
         "Category",
         cellStyle={
@@ -897,7 +895,6 @@ if result["Count"].sum() > 0:
         }
     )
 
-    # Count zentriert
     gb.configure_column(
         "Count",
         cellStyle={
@@ -905,7 +902,6 @@ if result["Count"].sum() > 0:
         }
     )
 
-    # Percentage zentriert
     gb.configure_column(
         "Percentage",
         cellStyle={
@@ -930,6 +926,7 @@ if result["Count"].sum() > 0:
             }
         }
     )
+
     st.divider()
 
     st.download_button(
