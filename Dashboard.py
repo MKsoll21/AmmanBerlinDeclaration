@@ -870,37 +870,27 @@ if result["Count"].sum() > 0:
     )
 
 
+fig.update_traces(
+    textposition="outside"
+)
 
-    fig.update_traces(
-
-        textposition="outside"
-
-    )
-
-
-
-  fig.update_layout(
-
+fig.update_layout(
     title_x=0.5,
-
     showlegend=False,
-
     plot_bgcolor="white",
-
     paper_bgcolor="white",
-
     xaxis_title="",
-
     yaxis_title="Number of commitments",
-
     font=dict(size=15),
-
     margin=dict(
         l=20,
         r=20,
         t=70,
         b=20
     ),
+    uniformtext_minsize=10,
+    uniformtext_mode="hide"
+)
 
     uniformtext_minsize=10,
     uniformtext_mode="hide"
@@ -915,34 +905,27 @@ fig.update_xaxes(
     showgrid=False
 )
 
+fig.update_layout(height=550)
+
 st.plotly_chart(
     fig,
-    use_container_width=True,
-    height=550
+    use_container_width=True
 )
-
 
 
     # ---------------------------------------------------
     # Table
     # ---------------------------------------------------
 
-  st.subheader("Disability marker breakdown")
-
-# ---------------------------------------------------
-# AgGrid table
-# ---------------------------------------------------
+st.subheader("Disability marker breakdown")
 
 gb = GridOptionsBuilder.from_dataframe(result)
 
-# Alle Spalten zentrieren
 gb.configure_default_column(
     resizable=True,
     sortable=True,
     filter=True,
-    cellStyle={
-        "textAlign": "center"
-    }
+    cellStyle={"textAlign": "center"}
 )
 
 grid_options = gb.build()
@@ -962,8 +945,7 @@ AgGrid(
     # ---------------------------------------------------
     # Download
     # ---------------------------------------------------
-
-    st.download_button(
+st.download_button(
 
         label="Download filtered CRS data",
 
