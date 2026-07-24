@@ -877,31 +877,56 @@ if result["Count"].sum() > 0:
         "Disability marker breakdown"
     )
 
-    gb = GridOptionsBuilder.from_dataframe(result)
+gb = GridOptionsBuilder.from_dataframe(result)
 
-    gb.configure_default_column(
-        resizable=True,
-        sortable=True,
-        filter=True,
-        cellStyle={
-            "textAlign": "center"
-        }
-    )
+# Standard-Spalten
+gb.configure_default_column(
+    resizable=True,
+    sortable=True,
+    filter=True,
+    cellStyle={
+        "textAlign": "center"
+    },
+    headerClass="bold-header"
+)
 
-    grid_options = gb.build()
+# Kategorie-Spalte linksbündig
+gb.configure_column(
+    "Category",
+    cellStyle={
+        "textAlign": "left"
+    }
+)
 
+# Zahlen-Spalten zentriert
+gb.configure_column(
+    "Count",
+    cellStyle={
+        "textAlign": "center"
+    }
+)
+
+gb.configure_column(
+    "Percentage",
+    cellStyle={
+        "textAlign": "center"
+    }
+)
+
+grid_options = gb.build()
     AgGrid(
-        result,
-        gridOptions=grid_options,
-        fit_columns_on_grid_load=True,
-        height=180,
-        theme="streamlit",
-        custom_css={
-            ".ag-header-cell-label": {
-                "justify-content": "center"
-            }
+    result,
+    gridOptions=grid_options,
+    fit_columns_on_grid_load=True,
+    height=180,
+    theme="streamlit",
+    custom_css={
+        ".ag-header-cell-label": {
+            "justify-content": "center",
+            "font-weight": "bold"
         }
-    )
+    }
+)
 
     st.divider()
 
