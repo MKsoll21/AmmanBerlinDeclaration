@@ -821,13 +821,17 @@ if result["Count"].sum() > 0:
         result,
         x="Category",
         y="Count",
-        color="Category",
-        category_orders={
-            "Category": [
-                "Not scored",
-                "Scored - not targeted",
-                "Targeted"
-            ]
+        color="Category"
+    )
+
+    fig.update_layout(
+        title_x=0.5
+    )
+
+    st.plotly_chart(
+        fig,
+        use_container_width=True
+    )
         },
         text=result.apply(
             lambda row: f'{row["Count"]}<br>{row["Percentage"]}%',
