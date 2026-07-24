@@ -821,17 +821,13 @@ if result["Count"].sum() > 0:
         result,
         x="Category",
         y="Count",
-        color="Category"
-    )
-
-    fig.update_layout(
-        title_x=0.5
-    )
-
-    st.plotly_chart(
-        fig,
-        use_container_width=True
-    )
+        color="Category",
+        category_orders={
+            "Category": [
+                "Not scored",
+                "Scored - not targeted",
+                "Targeted"
+            ]
         },
         text=result.apply(
             lambda row: f'{row["Count"]}<br>{row["Percentage"]}%',
@@ -845,7 +841,9 @@ if result["Count"].sum() > 0:
         }
     )
 
-    fig.update_traces(textposition="outside")
+    fig.update_traces(
+        textposition="outside"
+    )
 
     fig.update_layout(
         title_x=0.5,
@@ -856,7 +854,12 @@ if result["Count"].sum() > 0:
         xaxis_title="",
         yaxis_title="Number of commitments",
         font=dict(size=15),
-        margin=dict(l=20, r=20, t=70, b=20),
+        margin=dict(
+            l=20,
+            r=20,
+            t=70,
+            b=20
+        ),
         uniformtext_minsize=10,
         uniformtext_mode="hide"
     )
@@ -875,45 +878,5 @@ if result["Count"].sum() > 0:
         use_container_width=True
     )
 
-    st.divider()
 
-    st.subheader("Disability marker breakdown")
-
-    gb = GridOptionsBuilder.from_dataframe(result)
-
-    gb.configure_default_column(
-        resizable=True,
-        sortable=True,
-        filter=True,
-        cellStyle={"textAlign": "center"}
-    )
-
-    grid_options = gb.build()
-
-    AgGrid(
-        result,
-        gridOptions=grid_options,
-        fit_columns_on_grid_load=True,
-        height=180,
-        theme="streamlit",
-        custom_css={
-            ".ag-header-cell-label": {
-                "justify-content": "center"
-            }
-        }
-    )
-
-    st.divider()
-
-    st.download_button(
-        label="Download filtered CRS data",
-        data=filtered.to_csv(index=False).encode("utf-8"),
-        file_name="filtered_oecd_crs_data.csv",
-        mime="text/csv"
-    )
-
-else:
-
-    st.warning(
-        "No data available for selected filters."
-    )
+    
