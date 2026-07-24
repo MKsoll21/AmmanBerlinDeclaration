@@ -879,18 +879,17 @@ if result["Count"].sum() > 0:
 
 gb = GridOptionsBuilder.from_dataframe(result)
 
-# Standard-Spalten
+# Standardformatierung
 gb.configure_default_column(
     resizable=True,
     sortable=True,
     filter=True,
     cellStyle={
         "textAlign": "center"
-    },
-    headerClass="bold-header"
+    }
 )
 
-# Kategorie-Spalte linksbündig
+# Category-Spalte linksbündig
 gb.configure_column(
     "Category",
     cellStyle={
@@ -898,7 +897,7 @@ gb.configure_column(
     }
 )
 
-# Zahlen-Spalten zentriert
+# Count und Percentage zentrieren
 gb.configure_column(
     "Count",
     cellStyle={
@@ -906,6 +905,36 @@ gb.configure_column(
     }
 )
 
+gb.configure_column(
+    "Percentage",
+    cellStyle={
+        "textAlign": "center"
+    }
+)
+
+grid_options = gb.build()
+
+
+AgGrid(
+    result,
+    gridOptions=grid_options,
+    fit_columns_on_grid_load=True,
+    height=180,
+    theme="streamlit",
+    custom_css={
+
+        # Tabellenüberschriften fett
+        ".ag-header-cell-text": {
+            "font-weight": "bold"
+        },
+
+        # Überschriften zentriert
+        ".ag-header-cell-label": {
+            "justify-content": "center"
+        }
+
+    }
+)
 gb.configure_column(
     "Percentage",
     cellStyle={
