@@ -1,14 +1,7 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
-
-st.set_page_config(
-    page_title="Amman-Berlin Declaration",
-    layout="wide"
-)
-
-import pandas as pd
-import plotly.express as px
+from st_aggrid import AgGrid, GridOptionsBuilder
 
 # ---------------------------------------------------
 # Page configuration
@@ -19,14 +12,12 @@ st.set_page_config(
     layout="wide"
 )
 
-
 st.title("Amman-Berlin Declaration")
 
 st.caption(
     "OECD-DAC CRS analysis. Commitments only. "
     "Each CRS record counted individually."
 )
-
 
 # ---------------------------------------------------
 # Load data
@@ -755,36 +746,27 @@ else:
 
 
 
+st.markdown("### Key Indicators")
+
 col1, col2, col3 = st.columns(3)
 
-
-
 with col1:
-
     st.metric(
-        "CRS commitments analysed",
-        total_records
+        label="📄 CRS Commitments",
+        value=f"{total_records:,}"
     )
-
-
 
 with col2:
-
     st.metric(
-        "Targeted commitments",
-        targeted_records
+        label="♿ Targeted Commitments",
+        value=f"{targeted_records:,}"
     )
-
-
 
 with col3:
-
     st.metric(
-        "Targeted share",
-        f"{targeted_percentage:.1f}%"
+        label="📊 Targeted Share",
+        value=f"{targeted_percentage:.1f}%"
     )
-
-
 
 # ---------------------------------------------------
 # Disability marker summary
@@ -897,29 +879,47 @@ if result["Count"].sum() > 0:
 
 
 
-    fig.update_layout(
+  fig.update_layout(
 
-        showlegend=False,
+    title_x=0.5,
 
-        xaxis_title="",
+    showlegend=False,
 
-        yaxis_title="Number of commitments",
+    plot_bgcolor="white",
 
-        uniformtext_minsize=10,
+    paper_bgcolor="white",
 
-        uniformtext_mode="hide"
+    xaxis_title="",
 
-    )
+    yaxis_title="Number of commitments",
 
+    font=dict(size=15),
 
+    margin=dict(
+        l=20,
+        r=20,
+        t=70,
+        b=20
+    ),
 
-    st.plotly_chart(
+    uniformtext_minsize=10,
+    uniformtext_mode="hide"
+)
 
-        fig,
+fig.update_yaxes(
+    gridcolor="#E6E6E6",
+    zeroline=False
+)
 
-        use_container_width=True
+fig.update_xaxes(
+    showgrid=False
+)
 
-    )
+st.plotly_chart(
+    fig,
+    use_container_width=True,
+    height=550
+)
 
 
 
@@ -927,24 +927,38 @@ if result["Count"].sum() > 0:
     # Table
     # ---------------------------------------------------
 
-    st.subheader(
-        "Disability marker breakdown"
-    )
+  st.subheader("Disability marker breakdown")
 
+# ---------------------------------------------------
+# AgGrid table
+# ---------------------------------------------------
 
+gb = GridOptionsBuilder.from_dataframe(result)
 
-    st.dataframe(
+# Alle Spalten zentrieren
+gb.configure_default_column(
+    resizable=True,
+    sortable=True,
+    filter=True,
+    cellStyle={
+        "textAlign": "center"
+    }
+)
 
-        result,
+grid_options = gb.build()
 
-        hide_index=True,
-
-        use_container_width=True
-
-    )
-
-
-
+AgGrid(
+    result,
+    gridOptions=grid_options,
+    fit_columns_on_grid_load=True,
+    height=180,
+    theme="streamlit",
+    custom_css={
+        ".ag-header-cell-label": {
+            "justify-content": "center"
+        }
+    }
+)
     # ---------------------------------------------------
     # Download
     # ---------------------------------------------------
