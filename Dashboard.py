@@ -911,6 +911,3 @@ if result["Count"].sum() > 0:
 else:
 
     st.warning("No data available for selected filters.")
-
-
-    )
