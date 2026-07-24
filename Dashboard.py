@@ -873,90 +873,63 @@ if result["Count"].sum() > 0:
 
     st.divider()
 
-    st.subheader(
+        st.subheader(
         "Disability marker breakdown"
     )
 
-gb = GridOptionsBuilder.from_dataframe(result)
+    gb = GridOptionsBuilder.from_dataframe(result)
 
-# Standardformatierung
-gb.configure_default_column(
-    resizable=True,
-    sortable=True,
-    filter=True,
-    cellStyle={
-        "textAlign": "center"
-    }
-)
-
-# Category-Spalte linksbündig
-gb.configure_column(
-    "Category",
-    cellStyle={
-        "textAlign": "left"
-    }
-)
-
-# Count und Percentage zentrieren
-gb.configure_column(
-    "Count",
-    cellStyle={
-        "textAlign": "center"
-    }
-)
-
-gb.configure_column(
-    "Percentage",
-    cellStyle={
-        "textAlign": "center"
-    }
-)
-
-grid_options = gb.build()
-
-
-AgGrid(
-    result,
-    gridOptions=grid_options,
-    fit_columns_on_grid_load=True,
-    height=180,
-    theme="streamlit",
-    custom_css={
-
-        # Tabellenüberschriften fett
-        ".ag-header-cell-text": {
-            "font-weight": "bold"
-        },
-
-        # Überschriften zentriert
-        ".ag-header-cell-label": {
-            "justify-content": "center"
+    # Standardformatierung
+    gb.configure_default_column(
+        resizable=True,
+        sortable=True,
+        filter=True,
+        cellStyle={
+            "textAlign": "center"
         }
+    )
 
-    }
-)
-gb.configure_column(
-    "Percentage",
-    cellStyle={
-        "textAlign": "center"
-    }
-)
+    # Category linksbündig
+    gb.configure_column(
+        "Category",
+        cellStyle={
+            "textAlign": "left"
+        }
+    )
 
-grid_options = gb.build()
+    # Count zentriert
+    gb.configure_column(
+        "Count",
+        cellStyle={
+            "textAlign": "center"
+        }
+    )
+
+    # Percentage zentriert
+    gb.configure_column(
+        "Percentage",
+        cellStyle={
+            "textAlign": "center"
+        }
+    )
+
+    grid_options = gb.build()
+
     AgGrid(
-    result,
-    gridOptions=grid_options,
-    fit_columns_on_grid_load=True,
-    height=180,
-    theme="streamlit",
-    custom_css={
-        ".ag-header-cell-label": {
-            "justify-content": "center",
-            "font-weight": "bold"
+        result,
+        gridOptions=grid_options,
+        fit_columns_on_grid_load=True,
+        height=180,
+        theme="streamlit",
+        custom_css={
+            ".ag-header-cell-text": {
+                "font-weight": "bold"
+            },
+            ".ag-header-cell-label": {
+                "justify-content": "center"
+            }
         }
-    }
-)
-
+    )
     st.divider()
 
     st.download_button(
