@@ -148,13 +148,6 @@ data["Donor"] = (
 
 
 
-data["Donor"] = (
-    data["Donor"]
-    .replace(name_mapping)
-)
-
-
-
 
 # Commitments only
 
