@@ -871,5 +871,49 @@ if result["Count"].sum() > 0:
         use_container_width=True
     )
 
+    st.divider()
 
-    
+    st.subheader(
+        "Disability marker breakdown"
+    )
+
+    gb = GridOptionsBuilder.from_dataframe(result)
+
+    gb.configure_default_column(
+        resizable=True,
+        sortable=True,
+        filter=True,
+        cellStyle={
+            "textAlign": "center"
+        }
+    )
+
+    grid_options = gb.build()
+
+    AgGrid(
+        result,
+        gridOptions=grid_options,
+        fit_columns_on_grid_load=True,
+        height=180,
+        theme="streamlit",
+        custom_css={
+            ".ag-header-cell-label": {
+                "justify-content": "center"
+            }
+        }
+    )
+
+    st.divider()
+
+    st.download_button(
+        label="Download filtered CRS data",
+        data=filtered.to_csv(index=False).encode("utf-8"),
+        file_name="filtered_oecd_crs_data.csv",
+        mime="text/csv"
+    )
+
+else:
+
+    st.warning(
+        "No data available for selected filters."
+    )
