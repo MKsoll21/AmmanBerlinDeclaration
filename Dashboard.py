@@ -817,159 +817,100 @@ if result["Count"].sum() > 0:
 
 if result["Count"].sum() > 0:
 
-
     fig = px.bar(
-
         result,
-
         x="Category",
-
         y="Count",
-
         color="Category",
-
-
         category_orders={
-
             "Category": [
-
                 "Not scored",
-
                 "Scored - not targeted",
-
                 "Targeted"
-
             ]
-
         },
-
-
         text=result.apply(
-
-            lambda row:
-            f'{row["Count"]}<br>{row["Percentage"]}%',
-
+            lambda row: f'{row["Count"]}<br>{row["Percentage"]}%',
             axis=1
-
         ),
-
-
-        title="Disability Inclusion Marker",
-
-
+        title="Disability Inclusion Marker by CRS Commitments",
         color_discrete_map={
-
             "Not scored": "#BDBDBD",
-
             "Scored - not targeted": "#4C78A8",
-
             "Targeted": "#2CA02C"
-
         }
-
     )
 
+    fig.update_traces(textposition="outside")
 
-fig.update_traces(
-    textposition="outside"
-)
+    fig.update_layout(
+        title_x=0.5,
+        height=550,
+        showlegend=False,
+        plot_bgcolor="white",
+        paper_bgcolor="white",
+        xaxis_title="",
+        yaxis_title="Number of commitments",
+        font=dict(size=15),
+        margin=dict(l=20, r=20, t=70, b=20),
+        uniformtext_minsize=10,
+        uniformtext_mode="hide"
+    )
 
-fig.update_layout(
-    title_x=0.5,
-    showlegend=False,
-    plot_bgcolor="white",
-    paper_bgcolor="white",
-    xaxis_title="",
-    yaxis_title="Number of commitments",
-    font=dict(size=15),
-    margin=dict(
-        l=20,
-        r=20,
-        t=70,
-        b=20
-    ),
-    uniformtext_minsize=10,
-    uniformtext_mode="hide"
-)
+    fig.update_yaxes(
+        gridcolor="#E6E6E6",
+        zeroline=False
+    )
 
-    uniformtext_minsize=10,
-    uniformtext_mode="hide"
-)
+    fig.update_xaxes(
+        showgrid=False
+    )
 
-fig.update_yaxes(
-    gridcolor="#E6E6E6",
-    zeroline=False
-)
+    st.plotly_chart(
+        fig,
+        use_container_width=True
+    )
 
-fig.update_xaxes(
-    showgrid=False
-)
+    st.divider()
 
-fig.update_layout(height=550)
+    st.subheader("Disability marker breakdown")
 
-st.plotly_chart(
-    fig,
-    use_container_width=True
-)
+    gb = GridOptionsBuilder.from_dataframe(result)
 
+    gb.configure_default_column(
+        resizable=True,
+        sortable=True,
+        filter=True,
+        cellStyle={"textAlign": "center"}
+    )
 
-    # ---------------------------------------------------
-    # Table
-    # ---------------------------------------------------
+    grid_options = gb.build()
 
-st.subheader("Disability marker breakdown")
-
-gb = GridOptionsBuilder.from_dataframe(result)
-
-gb.configure_default_column(
-    resizable=True,
-    sortable=True,
-    filter=True,
-    cellStyle={"textAlign": "center"}
-)
-
-grid_options = gb.build()
-
-AgGrid(
-    result,
-    gridOptions=grid_options,
-    fit_columns_on_grid_load=True,
-    height=180,
-    theme="streamlit",
-    custom_css={
-        ".ag-header-cell-label": {
-            "justify-content": "center"
+    AgGrid(
+        result,
+        gridOptions=grid_options,
+        fit_columns_on_grid_load=True,
+        height=180,
+        theme="streamlit",
+        custom_css={
+            ".ag-header-cell-label": {
+                "justify-content": "center"
+            }
         }
-    }
-)
-    # ---------------------------------------------------
-    # Download
-    # ---------------------------------------------------
-st.download_button(
+    )
 
+    st.divider()
+
+    st.download_button(
         label="Download filtered CRS data",
-
-        data=filtered.to_csv(
-
-            index=False
-
-        ).encode("utf-8"),
-
-
+        data=filtered.to_csv(index=False).encode("utf-8"),
         file_name="filtered_oecd_crs_data.csv",
-
-
         mime="text/csv"
-
     )
-
-
 
 else:
 
+    st.warning("No data available for selected filters.")
 
-    st.warning(
-
-        "No data available for selected filters."
 
     )
