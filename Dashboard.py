@@ -913,5 +913,4 @@ else:
  else:
 
     st.warning(
-        "No data available for selected filters."
-    )
+        "No data available for selected filters.")
