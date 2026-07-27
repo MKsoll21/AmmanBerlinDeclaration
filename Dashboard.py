@@ -464,11 +464,8 @@ amman_berlin_recipient_endorsers = [
 
 amman_berlin_donor_endorsers = [
 
-    "Algeria",
     "Australia",
-    "Austria",
-    "Belgium",
-    "Canada",
+    "Croatia",
     "Denmark",
     "Finland",
     "France",
@@ -478,11 +475,13 @@ amman_berlin_donor_endorsers = [
     "Japan",
     "Korea",
     "Kuwait",
-    "Netherlands",
     "New Zealand",
     "Norway",
     "Portugal",
     "Qatar",
+    "Romania",
+    "Saudi Arabia",
+    "Slovenia",
     "Spain",
     "Sweden",
     "Türkiye",
