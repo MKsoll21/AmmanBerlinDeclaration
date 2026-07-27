@@ -578,22 +578,24 @@ recipient = st.sidebar.multiselect(
 
 # Donor
 
-donor_options = sorted(
+all_donor_options = sorted(
     data["Donor"]
     .dropna()
     .unique()
 )
 
-default_donors = (
-    [x for x in donor_options if x in amman_berlin_donor_endorsers]
-    if endorsing_donors
-    else []
-)
+if endorsing_donors:
+    donor_options = [
+        d for d in all_donor_options
+        if d in amman_berlin_donor_endorsers
+    ]
+else:
+    donor_options = all_donor_options
 
 donor = st.sidebar.multiselect(
     "Donor",
     donor_options,
-    default=default_donors,
+    default=donor_options if endorsing_donors else []
 )
 
 # Sector Group
