@@ -488,7 +488,6 @@ amman_berlin_donor_endorsers = [
     "Türkiye",
     "United Arab Emirates",
     "United Kingdom",
-    "United States",
 
     # OECD CRS donor institutions
 
