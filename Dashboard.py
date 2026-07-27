@@ -584,26 +584,17 @@ donor_options = sorted(
     .unique()
 )
 
-
-if endorsing_donors:
-
-    st.session_state["donor_filter"] = [
-        x for x in donor_options
-        if x.strip() in amman_berlin_donor_endorsers
-    ]
-
-else:
-
-    st.session_state["donor_filter"] = []
-
-
+default_donors = (
+    [x for x in donor_options if x in amman_berlin_donor_endorsers]
+    if endorsing_donors
+    else []
+)
 
 donor = st.sidebar.multiselect(
     "Donor",
     donor_options,
-    key="donor_filter"
+    default=default_donors,
 )
-
 
 # Sector Group
 
