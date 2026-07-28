@@ -604,24 +604,29 @@ def create_ranking(df, group_column):
         .groupby(group_column)
         .agg(
             Commitments=(group_column, "size"),
+
             Targeted=(
                 "Disability Category",
-                lambda x: (
-                    x == "Targeted"
-                ).sum()
-            )
+                lambda x: (x == "Targeted").sum()
+            ),
+
+            **{"Not screened": (
+                "Disability Category",
+                lambda x: (x == "Not scored").sum()
+            )},
+
+            **{"Not targeted": (
+                "Disability Category",
+                lambda x: (x == "Scored - not targeted").sum()
+            )}
         )
     )
 
-
     table["Targeted %"] = (
         table["Targeted"]
-        /
-        table["Commitments"]
-        *
-        100
+        / table["Commitments"]
+        * 100
     ).round(1)
-
 
     table = (
         table
@@ -633,9 +638,7 @@ def create_ranking(df, group_column):
         .reset_index()
     )
 
-
     return table
-
 
 
 def create_pair_ranking(
@@ -732,17 +735,15 @@ def style_table(df):
 
     table = df.copy()
 
-    if "Commitments" in table.columns:
-        table["Commitments"] = (
-            table["Commitments"]
-            .map(lambda x: f"{x:,}")
-        )
-
-    if "Targeted" in table.columns:
-        table["Targeted"] = (
-            table["Targeted"]
-            .map(lambda x: f"{x:,}")
-        )
+number_columns = [
+    "Commitments",
+    "Targeted",
+    "Not screened",
+    "Not targeted"
+]
+    for col in number_columns:
+        if col in table.columns:
+            table[col] = table[col].map(lambda x: f"{x:,}")
 
     if "Targeted %" in table.columns:
         table["Targeted %"] = (
