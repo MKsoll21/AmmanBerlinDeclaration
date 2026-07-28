@@ -798,7 +798,7 @@ def create_pair_ranking(df, columns):
     table = (
         table
         .sort_values("Commitments", ascending=False)
-        .head(15)
+        .head(25)
     )
 
     return table
