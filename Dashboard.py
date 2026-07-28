@@ -20,6 +20,18 @@ st.caption(
 )
 
 # ---------------------------------------------------
+# Dashboard color palette
+# ---------------------------------------------------
+
+COLOR_TARGETED = "#118CFF"       # Blue
+COLOR_NOT_TARGETED = "#E66B37"   # Orange
+COLOR_NOT_SCREENED = "#E6E6E6"   # Light grey
+
+COLOR_BACKGROUND = "#FFFFFF"
+COLOR_GRID = "#E6E6E6"
+COLOR_TEXT = "#333333"
+
+# ---------------------------------------------------
 # Load data
 # ---------------------------------------------------
 
@@ -818,11 +830,11 @@ if result["Count"].sum() > 0:
             axis=1
         ),
         title="Disability Inclusion Marker by CRS Commitments",
-        color_discrete_map={
-            "Not scored": "#BDBDBD",
-            "Scored - not targeted": "#4C78A8",
-            "Targeted": "#2CA02C"
-        }
+color_discrete_map={
+    "Not scored": COLOR_NOT_SCREENED,
+    "Scored - not targeted": COLOR_NOT_TARGETED,
+    "Targeted": COLOR_TARGETED
+}
     )
 
     fig.update_traces(
