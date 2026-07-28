@@ -205,7 +205,21 @@ data = data[
     .isin(allowed_modalities)
 ]
 
+# ---------------------------------------------------
+# Exclude sectors
+# ---------------------------------------------------
 
+excluded_sectors = [
+    "72010",
+    "72040",
+    "73010"
+]
+
+data = data[
+    ~data["SECTOR"]
+    .astype(str)
+    .isin(excluded_sectors)
+]
 # ---------------------------------------------------
 # Sector groups
 # ---------------------------------------------------
@@ -716,7 +730,27 @@ recipient_sector_table = create_pair_ranking(
 
 def style_table(df):
 
-    return df
+    table = df.copy()
+
+    if "Commitments" in table.columns:
+        table["Commitments"] = (
+            table["Commitments"]
+            .map(lambda x: f"{x:,}")
+        )
+
+    if "Targeted" in table.columns:
+        table["Targeted"] = (
+            table["Targeted"]
+            .map(lambda x: f"{x:,}")
+        )
+
+    if "Targeted %" in table.columns:
+        table["Targeted %"] = (
+            table["Targeted %"]
+            .map(lambda x: f"{x:.1f}%")
+        )
+
+    return table
 
 # ---------------------------------------------------
 # Display tables
