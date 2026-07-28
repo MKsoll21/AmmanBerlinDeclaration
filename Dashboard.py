@@ -158,6 +158,16 @@ data["Donor"] = (
     .replace(name_mapping)
 )
 
+# ---------------------------------------------------
+# Exclude unspecified recipients
+# ---------------------------------------------------
+
+data = data[
+    ~data["Recipient"]
+    .astype(str)
+    .str.contains("unspecified", case=False, na=False)
+]
+
 
 
 
