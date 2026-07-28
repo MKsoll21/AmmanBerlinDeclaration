@@ -841,7 +841,7 @@ tab1, tab2, tab3, tab4 = st.tabs(
 with tab1:
 
     st.markdown(
-        "### Top 15 Donors"
+        "### Top 25 Donors"
     )
 
     st.caption(
@@ -880,7 +880,7 @@ with tab1:
 with tab2:
 
     st.markdown(
-        "### Top 15 Recipients"
+        "### Top 25 Recipients"
     )
 
 
@@ -919,7 +919,7 @@ with tab2:
 with tab3:
 
     st.markdown(
-        "### Top 15 Sector Groups"
+        "### Top 25 Sector Groups"
     )
 
 
@@ -935,7 +935,7 @@ with tab3:
 
 
     st.markdown(
-        "### Top 15 Subsectors"
+        "### Top 25 Subsectors"
     )
 
 
@@ -997,7 +997,7 @@ with tab3:
 with tab4:
 
     st.markdown(
-        "### Top 15 Donor - Recipient Relationships"
+        "### Top 25 Donor - Recipient Relationships"
     )
 
 
@@ -1013,7 +1013,7 @@ with tab4:
 
 
     st.markdown(
-        "### Top 15 Donor - Sector Relationships"
+        "### Top 25 Donor - Sector Relationships"
     )
 
 
@@ -1029,7 +1029,7 @@ with tab4:
 
 
     st.markdown(
-        "### Top 15 Recipient - Sector Relationships"
+        "### Top 25 Recipient - Sector Relationships"
     )
 
 
