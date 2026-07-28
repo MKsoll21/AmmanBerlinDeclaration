@@ -352,16 +352,82 @@ st.sidebar.header(
 amman_berlin_recipient_endorsers = [
 
     "Algeria",
+    "Andorra",
+    "Armenia",
+    "Australia",
+    "Bahamas",
+    "Bahrain",
+    "Benin",
+    "Bosnia and Herzegovina",
+    "Botswana",
+    "Brazil",
+    "Cabo Verde",
+    "Cambodia",
+    "Chad",
+    "Colombia",
+    "Democratic Republic of the Congo",
+    "Croatia",
+    "Denmark",
+    "Dominican Republic",
+    "Djibouti",
+    "Ecuador",
     "Egypt",
+    "Finland",
+    "France",
     "Germany",
+    "Ghana",
+    "Guatemala",
+    "Guinea",
+    "Haiti",
+    "Honduras",
+    "Iceland",
     "Iraq",
+    "Ireland",
+    "Italy",
+    "Jamaica",
     "Jordan",
-    "Lebanon",
+    "Kazakhstan",
+    "Kenya",
+    "Korea",
+    "Kuwait",
+    "Liberia",
+    "Libya",
+    "Malawi",
+    "Mauritania",
+    "Mexico",
+    "Moldova",
+    "Mongolia",
     "Morocco",
+    "New Zealand",
+    "Nigeria",
+    "North Macedonia",
+    "Norway",
+    "Oman",
+    "Pakistan",
     "Palestine",
     "Türkiye",
+    "Paraguay",
+    "Peru",
+    "Poland",
+    "Portugal",
+    "Qatar",
+    "Romania",
+    "Sao Tome and Principe",
+    "Sierra Leone",
+    "Slovenia",
+    "Somalia",
+    "South Africa",
+    "Spain",
+    "Sweden",
+    "Tanzania",
+    "Togo",
+    "Türkiye",
     "Ukraine",
-    "United Kingdom"
+    "United Arab Emirates",
+    "United Kingdom",
+    "Uruguay",
+    "Zambia",
+    "Zimbabwe"
 
 ]
 
@@ -374,7 +440,6 @@ amman_berlin_donor_endorsers = [
     "Finland",
     "France",
     "Germany",
-    "Iceland",
     "Ireland",
     "Italy",
     "Japan",
@@ -382,7 +447,6 @@ amman_berlin_donor_endorsers = [
     "Kuwait",
     "New Zealand",
     "Norway",
-    "Poland",
     "Portugal",
     "Qatar",
     "Romania",
@@ -393,17 +457,40 @@ amman_berlin_donor_endorsers = [
     "Türkiye",
     "United Arab Emirates",
     "United Kingdom",
-   
+
+    # OECD CRS donor institutions
+
+    "Caribbean Development Bank [CarDB]",
+
+    "Development Bank of Latin America [CAF]",
 
     "EU Institutions",
 
+    "Food and Agriculture Organisation [FAO]",
+
+    "Inter-American Development Bank [IDB]",
+
+    "International Labour Organisation [ILO]",
+
+    "International Fund for Agricultural Development [IFAD]",
+
+    "International Organization for Migration [IOM]",
+
     "United Nations Development Programme [UNDP]",
+
+    "United Nations Population Fund [UNFPA]",
 
     "United Nations Children's Fund [UNICEF]",
 
     "United Nations High Commissioner for Refugees [UNHCR]",
 
-    "World Health Organisation [WHO]"
+    "United Nations Entity for Gender Equality and the Empowerment of Women [UN Women]",
+
+    "World Food Programme [WFP]",
+
+    "World Health Organisation [WHO]",
+
+    "Food and Agriculture Organization [FAO]"
 
 ]
 
