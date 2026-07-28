@@ -618,14 +618,10 @@ subsector_options = sorted(
     .unique()
 )
 
-
-
 subsector = st.sidebar.multiselect(
     "Subsector",
     subsector_options
 )
-
-
 
 # ---------------------------------------------------
 # Apply filters
@@ -633,16 +629,12 @@ subsector = st.sidebar.multiselect(
 
 filtered = data.copy()
 
-
-
 if recipient:
 
     filtered = filtered[
         filtered["Recipient"]
         .isin(recipient)
     ]
-
-
 
 if donor:
 
@@ -738,7 +730,7 @@ def create_ranking(df, group_column):
     table = (
         table
         .sort_values("Commitments", ascending=False)
-        .head(15)
+        .head(25)
         .reset_index()
     )
 
@@ -862,12 +854,6 @@ recipient_sector_table = create_pair_ranking(
     ]
 )
 
-
-
-# ---------------------------------------------------
-# Formatting helper
-# ---------------------------------------------------
-
 # ---------------------------------------------------
 # Formatting helper
 # ---------------------------------------------------
@@ -952,7 +938,7 @@ with tab1:
         ).encode("utf-8"),
 
         file_name=
-        "top15_donors.csv",
+        "top25_donors.csv",
 
         mime="text/csv"
 
@@ -991,7 +977,7 @@ with tab2:
         ).encode("utf-8"),
 
         file_name=
-        "top15_recipients.csv",
+        "top25_recipients.csv",
 
         mime="text/csv"
 
@@ -1051,7 +1037,7 @@ with tab3:
             ).encode("utf-8"),
 
             file_name=
-            "top15_sector_groups.csv",
+            "top25_sector_groups.csv",
 
             mime="text/csv"
 
@@ -1069,7 +1055,7 @@ with tab3:
             ).encode("utf-8"),
 
             file_name=
-            "top15_subsectors.csv",
+            "top25_subsectors.csv",
 
             mime="text/csv"
 
