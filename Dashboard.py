@@ -12,12 +12,21 @@ st.set_page_config(
     layout="wide"
 )
 
-st.title("Amman-Berlin Declaration")
+# ---------------------------------------------------
+# Header
+# ---------------------------------------------------
 
-st.caption(
-    "OECD-DAC CRS analysis. Commitments only. "
-    "Each CRS record counted individually."
-)
+left, right = st.columns([5, 1])
+
+with left:
+    st.title("Amman-Berlin Declaration")
+    st.caption(
+        "OECD-DAC CRS analysis. Commitments only. "
+        "Each CRS record counted individually."
+    )
+
+with right:
+    st.image("ABD Image.png", width=220)
 
 # ---------------------------------------------------
 # Dashboard color palette
