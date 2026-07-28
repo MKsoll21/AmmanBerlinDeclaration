@@ -6,19 +6,21 @@ import pandas as pd
 # Page configuration
 # ---------------------------------------------------
 
-st.set_page_config(
-    page_title="Data Explorer - Amman Berlin Declaration",
-    layout="wide"
-)
+# ---------------------------------------------------
+# Header
+# ---------------------------------------------------
 
+left, right = st.columns([4.5, 1.5])
 
-st.title("📊 Amman-Berlin Declaration - Data Explorer")
+with left:
+    st.title("📊 Amman-Berlin Declaration - Data Explorer")
+    st.caption(
+        "Top rankings based on filtered OECD-DAC CRS commitments. "
+        "Each CRS record counted individually."
+    )
 
-st.caption(
-    "Top rankings based on filtered OECD-DAC CRS commitments. "
-    "Each CRS record counted individually."
-)
-
+with right:
+    st.image("ABD Image.png", use_container_width=True)
 
 # ---------------------------------------------------
 # Load data
