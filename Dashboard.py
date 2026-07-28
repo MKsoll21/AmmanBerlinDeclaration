@@ -25,6 +25,7 @@ with left:
         "Each CRS record counted individually."
     )
 
+
 with right:
     st.image("ABD Image.png", use_container_width=True)
 
