@@ -605,11 +605,6 @@ def create_ranking(df, group_column):
         .agg(
             Commitments=(group_column, "size"),
 
-            Targeted=(
-                "Disability Category",
-                lambda x: (x == "Targeted").sum()
-            ),
-
             **{"Not screened": (
                 "Disability Category",
                 lambda x: (x == "Not scored").sum()
@@ -618,22 +613,42 @@ def create_ranking(df, group_column):
             **{"Not targeted": (
                 "Disability Category",
                 lambda x: (x == "Scored - not targeted").sum()
-            )}
+            )},
+
+            Targeted=(
+                "Disability Category",
+                lambda x: (x == "Targeted").sum()
+            )
         )
     )
 
-    table["Targeted %"] = (
-        table["Targeted"]
-        / table["Commitments"]
-        * 100
+    table["Not screened %"] = (
+        table["Not screened"] / table["Commitments"] * 100
     ).round(1)
+
+    table["Not targeted %"] = (
+        table["Not targeted"] / table["Commitments"] * 100
+    ).round(1)
+
+    table["Targeted %"] = (
+        table["Targeted"] / table["Commitments"] * 100
+    ).round(1)
+
+    table = table[
+        [
+            "Commitments",
+            "Not screened",
+            "Not screened %",
+            "Not targeted",
+            "Not targeted %",
+            "Targeted",
+            "Targeted %"
+        ]
+    ]
 
     table = (
         table
-        .sort_values(
-            "Commitments",
-            ascending=False
-        )
+        .sort_values("Commitments", ascending=False)
         .head(15)
         .reset_index()
     )
@@ -649,41 +664,55 @@ def create_pair_ranking(df, columns):
         .agg(
             Commitments=("Disability Category", "size"),
 
-            Targeted=(
+            **{"Not screened": (
                 "Disability Category",
-                lambda x: (x == "Targeted").sum()
-            ),
+                lambda x: (x == "Not scored").sum()
+            )},
 
             **{"Not targeted": (
                 "Disability Category",
                 lambda x: (x == "Scored - not targeted").sum()
             )},
 
-            **{"Not screened": (
+            Targeted=(
                 "Disability Category",
-                lambda x: (x == "Not scored").sum()
-            )}
+                lambda x: (x == "Targeted").sum()
+            )
         )
         .reset_index()
     )
 
-    table["Targeted %"] = (
-        table["Targeted"]
-        / table["Commitments"]
-        * 100
+    table["Not screened %"] = (
+        table["Not screened"] / table["Commitments"] * 100
     ).round(1)
+
+    table["Not targeted %"] = (
+        table["Not targeted"] / table["Commitments"] * 100
+    ).round(1)
+
+    table["Targeted %"] = (
+        table["Targeted"] / table["Commitments"] * 100
+    ).round(1)
+
+    table = table[
+        columns + [
+            "Commitments",
+            "Not screened",
+            "Not screened %",
+            "Not targeted",
+            "Not targeted %",
+            "Targeted",
+            "Targeted %"
+        ]
+    ]
 
     table = (
         table
-        .sort_values(
-            "Commitments",
-            ascending=False
-        )
+        .sort_values("Commitments", ascending=False)
         .head(15)
     )
 
     return table
-
 # ---------------------------------------------------
 # Create tables
 # ---------------------------------------------------
@@ -760,20 +789,24 @@ def style_table(df):
 
     number_columns = [
         "Commitments",
-        "Targeted",
+        "Not screened",
         "Not targeted",
-        "Not screened"
+        "Targeted"
     ]
 
     for col in number_columns:
         if col in table.columns:
             table[col] = table[col].map(lambda x: f"{x:,}")
 
-    if "Targeted %" in table.columns:
-        table["Targeted %"] = (
-            table["Targeted %"]
-            .map(lambda x: f"{x:.1f}%")
-        )
+    percent_columns = [
+        "Not screened %",
+        "Not targeted %",
+        "Targeted %"
+    ]
+
+    for col in percent_columns:
+        if col in table.columns:
+            table[col] = table[col].map(lambda x: f"{x:.1f}%")
 
     return table
 
