@@ -891,51 +891,45 @@ color_discrete_map={
         }
     )
 
-gb.configure_column(
-    "Category",
-    headerClass="ag-left-aligned-header",
-    cellStyle={
-        "textAlign": "left"
-    }
-)
+    gb.configure_column(
+        "Category",
+        headerClass="ag-left-aligned-header",
+        cellStyle={"textAlign": "left"}
+    )
 
-gb.configure_column(
-    "Count",
-    headerClass="ag-center-aligned-header",
-    cellStyle={
-        "textAlign": "center"
-    }
-)
+    gb.configure_column(
+        "Count",
+        headerClass="ag-center-aligned-header",
+        cellStyle={"textAlign": "center"}
+    )
 
-gb.configure_column(
-    "Percentage",
-    headerClass="ag-center-aligned-header",
-    cellStyle={
-        "textAlign": "center"
-    }
-)
+    gb.configure_column(
+        "Percentage",
+        headerClass="ag-center-aligned-header",
+        cellStyle={"textAlign": "center"}
+    )
 
     grid_options = gb.build()
 
-AgGrid(
-    result,
-    gridOptions=grid_options,
-    fit_columns_on_grid_load=True,
-    height=180,
-    theme="streamlit",
-    custom_css={
-        ".ag-header-cell-text": {
-            "font-weight": "700",
-            "font-size": "14px"
-        },
-        ".ag-center-aligned-header .ag-header-cell-label": {
-            "justify-content": "center"
-        },
-        ".ag-left-aligned-header .ag-header-cell-label": {
-            "justify-content": "flex-start"
+    AgGrid(
+        result,
+        gridOptions=grid_options,
+        fit_columns_on_grid_load=True,
+        height=180,
+        theme="streamlit",
+        custom_css={
+            ".ag-header-cell-text": {
+                "font-weight": "700",
+                "font-size": "14px"
+            },
+            ".ag-center-aligned-header .ag-header-cell-label": {
+                "justify-content": "center"
+            },
+            ".ag-left-aligned-header .ag-header-cell-label": {
+                "justify-content": "flex-start"
+            }
         }
-    }
-)
+    )
 
     st.divider()
 
