@@ -26,7 +26,7 @@ with left:
     )
 
 with right:
-    st.image("ABD Image.png", width=160)
+    st.image("ABD Image.png", use_container_width=True)
 
 # ---------------------------------------------------
 # Dashboard color palette
