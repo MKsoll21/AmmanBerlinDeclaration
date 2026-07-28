@@ -641,18 +641,40 @@ def create_ranking(df, group_column):
     return table
 
 
-def create_pair_ranking(
-    df,
-    columns
-):
+def create_pair_ranking(df, columns):
 
     table = (
         df
         .groupby(columns)
-        .size()
-        .reset_index(
-            name="Commitments"
+        .agg(
+            Commitments=("Disability Category", "size"),
+
+            Targeted=(
+                "Disability Category",
+                lambda x: (x == "Targeted").sum()
+            ),
+
+            **{"Not targeted": (
+                "Disability Category",
+                lambda x: (x == "Scored - not targeted").sum()
+            )},
+
+            **{"Not screened": (
+                "Disability Category",
+                lambda x: (x == "Not scored").sum()
+            )}
         )
+        .reset_index()
+    )
+
+    table["Targeted %"] = (
+        table["Targeted"]
+        / table["Commitments"]
+        * 100
+    ).round(1)
+
+    table = (
+        table
         .sort_values(
             "Commitments",
             ascending=False
@@ -660,10 +682,7 @@ def create_pair_ranking(
         .head(15)
     )
 
-
     return table
-
-
 
 # ---------------------------------------------------
 # Create tables
@@ -731,16 +750,21 @@ recipient_sector_table = create_pair_ranking(
 # Formatting helper
 # ---------------------------------------------------
 
+# ---------------------------------------------------
+# Formatting helper
+# ---------------------------------------------------
+
 def style_table(df):
 
     table = df.copy()
 
-number_columns = [
-    "Commitments",
-    "Targeted",
-    "Not screened",
-    "Not targeted"
-]
+    number_columns = [
+        "Commitments",
+        "Targeted",
+        "Not targeted",
+        "Not screened"
+    ]
+
     for col in number_columns:
         if col in table.columns:
             table[col] = table[col].map(lambda x: f"{x:,}")
