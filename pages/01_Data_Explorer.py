@@ -442,7 +442,6 @@ amman_berlin_donor_endorsers = [
     "Germany",
     "Ireland",
     "Italy",
-    "Japan",
     "Korea",
     "Kuwait",
     "New Zealand",
