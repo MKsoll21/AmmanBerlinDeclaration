@@ -228,11 +228,9 @@ data = data[
 
 sector_mapping = {
 
-    "111": "Education",
-    "112": "Education",
+    "11": "Education",
 
-    "121": "Health",
-    "122": "Health",
+    "12": "Health",
 
     "130": "Population Policies / Reproductive Health",
 
