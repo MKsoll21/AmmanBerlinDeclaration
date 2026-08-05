@@ -29,7 +29,7 @@ def get_disability_debrief():
         feed = feedparser.parse(url)
 
 
-        for entry in feed.entries[:10]:
+        for entry in feed.entries[:3]:
 
             articles.append(
                 {
@@ -123,9 +123,9 @@ if debrief_news:
 
         with st.container(border=True):
 
-            st.subheader(
-                item["title"]
-            )
+          st.caption(
+            f'{item["source"]} | {item["date"]}'
+)
 
             st.caption(
                 item["source"]
