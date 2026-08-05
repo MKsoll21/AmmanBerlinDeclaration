@@ -58,16 +58,48 @@ def get_disability_debrief():
 # RSS News
 # ------------------------------------------------
 
+# ------------------------------------------------
+# News Sources
+# ------------------------------------------------
+
 NEWS_FEEDS = [
+
+    # ♿ Disability Inclusion
+
+    {
+        "name": "Disability Debrief",
+        "category": "♿ Disability Inclusion",
+        "url": "https://www.disabilitydebrief.org/rss/"
+    },
+
+    {
+        "name": "UN Disability",
+        "category": "♿ Disability Inclusion",
+        "url": "https://news.un.org/feed/subscribe/en/news/topic/disability/feed/rss.xml"
+    },
+
+
+    # 🌍 Development Cooperation
 
     {
         "name": "OECD",
+        "category": "🌍 Development Cooperation",
         "url": "https://www.oecd.org/newsroom/rss.xml"
     },
 
     {
+        "name": "UNDP",
+        "category": "🌍 Development Cooperation",
+        "url": "https://www.undp.org/rss.xml"
+    },
+
+
+    # 🚨 Humanitarian
+
+    {
         "name": "ReliefWeb",
-        "url": "https://reliefweb.int/rss.xml"
+        "category": "🚨 Humanitarian & Middle East",
+        "url": "https://reliefweb.int/updates/rss.xml"
     }
 
 ]
