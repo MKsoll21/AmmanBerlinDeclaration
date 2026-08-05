@@ -190,33 +190,57 @@ else:
 st.divider()
 
 st.subheader(
-    "🌍 Other News Sources"
+    "🌍 Development & Humanitarian Monitoring"
 )
 
 
 news = load_news()
 
 
-if news:
+categories = [
 
-    for item in news:
+    "♿ Disability Inclusion",
 
-        with st.container(border=True):
+    "🌍 Development Cooperation",
 
-            st.subheader(
-                item["title"]
-            )
+    "🚨 Humanitarian & Middle East"
 
-            st.caption(
-                f'{item["source"]} | {item["date"]}'
-            )
+]
 
-            st.markdown(
-                f'[Read article]({item["link"]})'
-            )
 
-else:
+for category in categories:
 
-    st.info(
-        "No other news available."
+    st.markdown(
+        f"### {category}"
     )
+
+
+    category_news = [
+        item for item in news
+        if item["category"] == category
+    ]
+
+
+    if category_news:
+
+        for item in category_news:
+
+            with st.container(border=True):
+
+                st.subheader(
+                    item["title"]
+                )
+
+                st.caption(
+                    f'{item["source"]} | {item["date"]}'
+                )
+
+                st.markdown(
+                    f'[🔗 Read article]({item["link"]})'
+                )
+
+    else:
+
+        st.info(
+            "No news available."
+        )
