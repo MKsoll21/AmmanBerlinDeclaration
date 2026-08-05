@@ -40,44 +40,55 @@ def get_disability_debrief():
         )
 
 
+        # Alle Links prüfen
         for link in soup.find_all("a", href=True):
 
             title = link.get_text(
+                " ",
                 strip=True
             )
 
             href = link["href"]
 
 
+            # nur echte Artikel behalten
             if (
                 title
-                and len(title) > 20
+                and len(title) > 15
                 and href.startswith("/")
             ):
 
-                if href not in [
-                    x["link"] for x in articles
-                ]:
+                full_url = (
+                    "https://www.disabilitydebrief.org"
+                    + href
+                )
+
+
+                # Duplikate vermeiden
+                if not any(
+                    a["link"] == full_url
+                    for a in articles
+                ):
 
                     articles.append(
                         {
                             "title": title,
-                            "link": 
-                                "https://www.disabilitydebrief.org" + href,
-                            "source":
-                                "Disability Debrief"
+                            "link": full_url,
+                            "source": "Disability Debrief"
                         }
                     )
 
 
+        return articles[:10]
+
+
     except Exception as e:
 
-        st.warning(
+        st.error(
             f"Disability Debrief error: {e}"
         )
 
-
-    return articles[:5]
+        return []
 
 
 # ------------------------------------------------
