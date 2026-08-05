@@ -34,9 +34,27 @@ def get_disability_debrief():
 
     articles = []
 
-    for article in soup.find_all("article")[:5]:
+for link in soup.find_all("a"):
 
-        title = article.find("h2")
+    text = link.get_text(strip=True)
+
+    href = link.get("href")
+
+    if (
+        text
+        and href
+        and "/story/" in href
+    ):
+
+        articles.append({
+
+            "title": text,
+            "link": href,
+            "source": "Disability Debrief"
+
+        })
+
+return articles[:5]
         link = article.find("a")
 
         if title and link:
