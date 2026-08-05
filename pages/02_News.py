@@ -38,7 +38,8 @@ def get_disability_debrief():
             response.text,
             "html.parser"
         )
-
+        st.write(response.status_code)
+        st.write(response.text[:500])
 
         # Alle Links prüfen
         for link in soup.find_all("a", href=True):
