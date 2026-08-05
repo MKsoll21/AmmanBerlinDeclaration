@@ -28,7 +28,10 @@ def get_disability_debrief():
 
         response = requests.get(
             url,
-            timeout=10
+            timeout=10,
+            headers={
+                "User-Agent": "Mozilla/5.0"
+            }
         )
 
         soup = BeautifulSoup(
@@ -36,37 +39,45 @@ def get_disability_debrief():
             "html.parser"
         )
 
-        for link in soup.find_all("a"):
 
-            title = link.get_text(strip=True)
-            href = link.get("href")
+        for link in soup.find_all("a", href=True):
+
+            title = link.get_text(
+                strip=True
+            )
+
+            href = link["href"]
+
 
             if (
                 title
-                and href
-                and "/story/" in href
+                and len(title) > 20
+                and href.startswith("/")
             ):
 
-                if href.startswith("/"):
-                    href = url.rstrip("/") + href
+                if href not in [
+                    x["link"] for x in articles
+                ]:
 
-                articles.append(
-                    {
-                        "title": title,
-                        "link": href,
-                        "source": "Disability Debrief"
-                    }
-                )
+                    articles.append(
+                        {
+                            "title": title,
+                            "link": 
+                                "https://www.disabilitydebrief.org" + href,
+                            "source":
+                                "Disability Debrief"
+                        }
+                    )
+
 
     except Exception as e:
 
         st.warning(
-            f"Disability Debrief could not be loaded: {e}"
+            f"Disability Debrief error: {e}"
         )
 
 
     return articles[:5]
-
 
 
 # ------------------------------------------------
