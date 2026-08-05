@@ -1,12 +1,8 @@
-import streamlit as st
-
-
 dashboard = st.Page(
     "Dashboard.py",
     title="Dashboard",
     icon="📊"
 )
-
 
 explorer = st.Page(
     "pages/01_Data_Explorer.py",
@@ -14,16 +10,20 @@ explorer = st.Page(
     icon="🔎"
 )
 
+news = st.Page(
+    "pages/02_News.py",
+    title="News",
+    icon="📰"
+)
 
 pg = st.navigation(
     {
         "": [
             dashboard,
-            explorer
+            explorer,
+            news
         ]
     }
 )
 
-
 pg.run()
-
