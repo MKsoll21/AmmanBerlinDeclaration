@@ -54,7 +54,6 @@ articles.append(
     }
 )
 
-
     except Exception as e:
 
         st.error(
@@ -184,7 +183,7 @@ else:
         "No Disability Debrief articles found."
     )
 # ------------------------------------------------
-# Display other sources
+# Display other sources by category
 # ------------------------------------------------
 
 st.divider()
@@ -216,7 +215,8 @@ for category in categories:
 
 
     category_news = [
-        item for item in news
+        item
+        for item in news
         if item["category"] == category
     ]
 
@@ -238,6 +238,7 @@ for category in categories:
                 st.markdown(
                     f'[🔗 Read article]({item["link"]})'
                 )
+
 
     else:
 
