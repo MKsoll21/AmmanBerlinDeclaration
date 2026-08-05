@@ -79,39 +79,42 @@ def load_news():
 
     articles = []
 
-for source in NEWS_FEEDS:
+    for source in NEWS_FEEDS:
 
-    feed = feedparser.parse(
-        source["url"]
-    )
-
-    if not feed.entries:
-        continue
-
-    for entry in feed.entries[:3]:
-
-        articles.append(
-            {
-                "title": entry.get(
-                    "title",
-                    "No title"
-                ),
-
-                "link": entry.get(
-                    "link",
-                    "#"
-                ),
-
-                "source": source["name"],
-
-                "category": source["category"],
-
-                "date": entry.get(
-                    "published",
-                    ""
-                )
-            }
+        feed = feedparser.parse(
+            source["url"]
         )
+
+        if not feed.entries:
+            continue
+
+
+        for entry in feed.entries[:3]:
+
+            articles.append(
+                {
+                    "title": entry.get(
+                        "title",
+                        "No title"
+                    ),
+
+                    "link": entry.get(
+                        "link",
+                        "#"
+                    ),
+
+                    "source": source["name"],
+
+                    "category": source["category"],
+
+                    "date": entry.get(
+                        "published",
+                        ""
+                    )
+                }
+            )
+
+    return articles
 
 # ------------------------------------------------
 # Display
