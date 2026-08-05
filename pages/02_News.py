@@ -78,8 +78,12 @@ def load_news():
         feed = feedparser.parse(
             source["url"]
         )
-    if not feed.entries:
-    continue
+
+        # Skip empty feeds
+        if not feed.entries:
+            continue
+
+
         for entry in feed.entries[:3]:
 
             articles.append(
@@ -106,7 +110,6 @@ def load_news():
             )
 
     return articles
-
 
 
 # ------------------------------------------------
