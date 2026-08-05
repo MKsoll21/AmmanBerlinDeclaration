@@ -123,16 +123,16 @@ if debrief_news:
 
         with st.container(border=True):
 
-          st.caption(
-            f'{item["source"]} | {item["date"]}'
-)
+            st.subheader(
+                item["title"]
+            )
 
             st.caption(
-                item["source"]
+                f'{item["source"]} | {item["date"]}'
             )
 
             st.markdown(
-                f'[Read article]({item["link"]})'
+                f'[🔗 Read article]({item["link"]})'
             )
 
 else:
@@ -140,9 +140,6 @@ else:
     st.info(
         "No Disability Debrief articles found."
     )
-
-
-
 # ------------------------------------------------
 # Display other sources
 # ------------------------------------------------
