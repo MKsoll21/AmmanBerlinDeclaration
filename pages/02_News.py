@@ -92,20 +92,28 @@ st.divider()
 
 st.subheader("🌍 Other News Sources")
 
-
 news = load_news()
 
+if news:
 
-for item in news:
+    for item in news:
 
-    with st.container(border=True):
+        with st.container(border=True):
 
-        st.subheader(item["title"])
+            st.subheader(
+                item["title"]
+            )
 
-        st.caption(
-            f'{item["source"]} | {item["date"]}'
-        )
+            st.caption(
+                f'{item["source"]} | {item.get("date","")}'
+            )
 
-        st.markdown(
-            f"[Read article]({item["link"]})"
-        )
+            st.markdown(
+                f'[Read article]({item["link"]})'
+            )
+
+else:
+
+    st.info(
+        "No news available at the moment."
+    )
