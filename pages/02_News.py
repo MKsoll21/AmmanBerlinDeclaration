@@ -53,7 +53,6 @@ NEWS_FEEDS = [
     "url": "https://www.devex.com/rss"
 },
 
-
 # ------------------------------------------------
 # Load News
 # ------------------------------------------------
@@ -69,7 +68,6 @@ def load_news():
             source["url"]
         )
 
-        # Skip empty feeds
         if not feed.entries:
             continue
 
