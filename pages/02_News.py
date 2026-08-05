@@ -18,6 +18,8 @@ st.title("📰 Latest News")
 
 NEWS_FEEDS = [
 
+    # ♿ Disability Inclusion
+
     {
         "name": "Disability Debrief",
         "category": "♿ Disability Inclusion",
@@ -30,26 +32,37 @@ NEWS_FEEDS = [
         "url": "https://news.un.org/feed/subscribe/en/news/topic/disability/feed/rss.xml"
     },
 
+
+    # 🌍 Development Cooperation
+
     {
-        "name": "OECD",
+        "name": "OECD Development",
         "category": "🌍 Development Cooperation",
-        "url": "https://www.oecd.org/newsroom/rss.xml"
+        "url": "https://www.oecd.org/development/rss.xml"
     },
 
     {
-        "name": "UNDP",
+        "name": "World Bank",
         "category": "🌍 Development Cooperation",
-        "url": "https://www.undp.org/rss.xml"
+        "url": "https://www.worldbank.org/en/news/all?format=rss"
     },
+
+
+    # 🚨 Humanitarian
 
     {
         "name": "ReliefWeb",
         "category": "🚨 Humanitarian & Middle East",
-        "url": "https://reliefweb.int/updates/rss.xml"
+        "url": "https://reliefweb.int/rss.xml"
+    },
+
+    {
+        "name": "UN OCHA",
+        "category": "🚨 Humanitarian & Middle East",
+        "url": "https://www.unocha.org/rss.xml"
     }
 
 ]
-
 
 # ------------------------------------------------
 # Load News
@@ -65,7 +78,8 @@ def load_news():
         feed = feedparser.parse(
             source["url"]
         )
-
+    if not feed.entries:
+    continue
         for entry in feed.entries[:3]:
 
             articles.append(
