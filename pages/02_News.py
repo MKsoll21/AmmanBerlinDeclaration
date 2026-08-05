@@ -33,25 +33,42 @@ NEWS_FEEDS = [
     },
 
 
-   # 🌍 Development Cooperation
+    # 🌍 Development Cooperation
 
-{
-    "name": "World Bank",
-    "category": "🌍 Development Cooperation",
-    "url": "https://www.worldbank.org/en/news/all?format=rss"
-},
+    {
+        "name": "World Bank",
+        "category": "🌍 Development Cooperation",
+        "url": "https://www.worldbank.org/en/news/all?format=rss"
+    },
 
-{
-    "name": "UNDP",
-    "category": "🌍 Development Cooperation",
-    "url": "https://www.undp.org/rss.xml"
-},
+    {
+        "name": "UNDP",
+        "category": "🌍 Development Cooperation",
+        "url": "https://www.undp.org/rss.xml"
+    },
 
-{
-    "name": "Devex",
-    "category": "🌍 Development Cooperation",
-    "url": "https://www.devex.com/rss"
-},
+    {
+        "name": "Devex",
+        "category": "🌍 Development Cooperation",
+        "url": "https://www.devex.com/rss"
+    },
+
+
+    # 🚨 Humanitarian & Middle East
+
+    {
+        "name": "UN OCHA",
+        "category": "🚨 Humanitarian & Middle East",
+        "url": "https://www.unocha.org/rss.xml"
+    },
+
+    {
+        "name": "ReliefWeb",
+        "category": "🚨 Humanitarian & Middle East",
+        "url": "https://reliefweb.int/rss.xml"
+    }
+
+]
 
 # ------------------------------------------------
 # Load News
