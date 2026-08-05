@@ -1,3 +1,5 @@
+import streamlit as st
+
 dashboard = st.Page(
     "Dashboard.py",
     title="Dashboard",
