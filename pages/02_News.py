@@ -38,11 +38,10 @@ def get_disability_debrief():
             response.text,
             "html.parser"
         )
-        st.write(response.status_code)
-        st.write(response.text[:500])
 
-        # Alle Links prüfen
-        for link in soup.find_all("a", href=True):
+
+        # Test: gefundene Links anzeigen
+        for link in soup.find_all("a", href=True)[:30]:
 
             title = link.get_text(
                 " ",
@@ -51,8 +50,13 @@ def get_disability_debrief():
 
             href = link["href"]
 
+            st.write(
+                title,
+                " --> ",
+                href
+            )
 
-            # nur echte Artikel behalten
+
             if (
                 title
                 and len(title) > 15
@@ -65,7 +69,6 @@ def get_disability_debrief():
                 )
 
 
-                # Duplikate vermeiden
                 if not any(
                     a["link"] == full_url
                     for a in articles
