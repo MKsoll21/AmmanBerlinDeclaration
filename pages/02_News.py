@@ -15,75 +15,33 @@ st.title("📰 Latest News")
 
 
 # ------------------------------------------------
-# Disability Debrief
+# Disability Debrief RSS
 # ------------------------------------------------
 
 def get_disability_debrief():
 
-    url = "https://www.disabilitydebrief.org/"
+    url = "https://www.disabilitydebrief.org/rss/"
 
     articles = []
 
     try:
 
-        response = requests.get(
-            url,
-            timeout=10,
-            headers={
-                "User-Agent": "Mozilla/5.0"
-            }
-        )
-
-        soup = BeautifulSoup(
-            response.text,
-            "html.parser"
-        )
+        feed = feedparser.parse(url)
 
 
-        # Test: gefundene Links anzeigen
-        for link in soup.find_all("a", href=True)[:30]:
+        for entry in feed.entries[:10]:
 
-            title = link.get_text(
-                " ",
-                strip=True
-            )
-
-            href = link["href"]
-
-            st.write(
-                title,
-                " --> ",
-                href
-            )
-
-
-            if (
-                title
-                and len(title) > 15
-                and href.startswith("/")
-            ):
-
-                full_url = (
-                    "https://www.disabilitydebrief.org"
-                    + href
-                )
-
-
-                if not any(
-                    a["link"] == full_url
-                    for a in articles
-                ):
-
-                    articles.append(
-                        {
-                            "title": title,
-                            "link": full_url,
-                            "source": "Disability Debrief"
-                        }
+            articles.append(
+                {
+                    "title": entry.title,
+                    "link": entry.link,
+                    "source": "Disability Debrief",
+                    "date": entry.get(
+                        "published",
+                        ""
                     )
-
-
-        return articles[:10]
+                }
+            )
 
 
     except Exception as e:
@@ -92,7 +50,8 @@ def get_disability_debrief():
             f"Disability Debrief error: {e}"
         )
 
-        return []
+
+    return articles
 
 
 # ------------------------------------------------
