@@ -15,102 +15,162 @@ st.title("📰 Latest News")
 
 
 # ------------------------------------------------
-# Disability Debrief Funktion HIER EINFÜGEN
+# Disability Debrief
 # ------------------------------------------------
 
 def get_disability_debrief():
 
     url = "https://www.disabilitydebrief.org/"
 
-    response = requests.get(
-        url,
-        timeout=10
-    )
+    articles = []
 
-    soup = BeautifulSoup(
-        response.text,
-        "html.parser"
-    )
+    try:
+
+        response = requests.get(
+            url,
+            timeout=10
+        )
+
+        soup = BeautifulSoup(
+            response.text,
+            "html.parser"
+        )
+
+        for link in soup.find_all("a"):
+
+            title = link.get_text(strip=True)
+            href = link.get("href")
+
+            if (
+                title
+                and href
+                and "/story/" in href
+            ):
+
+                if href.startswith("/"):
+                    href = url.rstrip("/") + href
+
+                articles.append(
+                    {
+                        "title": title,
+                        "link": href,
+                        "source": "Disability Debrief"
+                    }
+                )
+
+    except Exception as e:
+
+        st.warning(
+            f"Disability Debrief could not be loaded: {e}"
+        )
+
+
+    return articles[:5]
+
+
+
+# ------------------------------------------------
+# RSS News
+# ------------------------------------------------
+
+NEWS_FEEDS = [
+
+    {
+        "name": "OECD",
+        "url": "https://www.oecd.org/newsroom/rss.xml"
+    },
+
+    {
+        "name": "ReliefWeb",
+        "url": "https://reliefweb.int/rss.xml"
+    }
+
+]
+
+
+@st.cache_data(ttl=3600)
+def load_news():
 
     articles = []
 
-for link in soup.find_all("a"):
 
-    text = link.get_text(strip=True)
+    for source in NEWS_FEEDS:
 
-    href = link.get("href")
+        feed = feedparser.parse(
+            source["url"]
+        )
 
-    if (
-        text
-        and href
-        and "/story/" in href
-    ):
 
-        articles.append({
+        for entry in feed.entries[:5]:
 
-            "title": text,
-            "link": href,
-            "source": "Disability Debrief"
+            articles.append(
+                {
+                    "title": entry.title,
+                    "link": entry.link,
+                    "source": source["name"],
+                    "date": entry.get(
+                        "published",
+                        ""
+                    )
+                }
+            )
 
-        })
-
-return articles[:5]
-        link = article.find("a")
-
-        if title and link:
-
-            articles.append({
-
-                "title": title.text.strip(),
-                "link": link.get("href"),
-                "source": "Disability Debrief"
-
-            })
 
     return articles
 
 
 
 # ------------------------------------------------
-# RSS News Funktion (dein bestehender Code)
+# Display Disability Debrief
 # ------------------------------------------------
 
-@st.cache_data(ttl=3600)
-def load_news():
+st.subheader(
+    "♿ Disability Debrief"
+)
 
-    ...
-    
-
-# ------------------------------------------------
-# Anzeige
-# ------------------------------------------------
-
-st.subheader("♿ Disability Debrief")
 
 debrief_news = get_disability_debrief()
 
 
-for item in debrief_news:
+if debrief_news:
 
-    with st.container(border=True):
+    for item in debrief_news:
 
-        st.write(item["title"])
+        with st.container(border=True):
 
-        st.caption(
-            item["source"]
-        )
+            st.subheader(
+                item["title"]
+            )
 
-        st.markdown(
-            f"[Read article]({item['link']})"
-        )
+            st.caption(
+                item["source"]
+            )
 
+            st.markdown(
+                f'[Read article]({item["link"]})'
+            )
+
+else:
+
+    st.info(
+        "No Disability Debrief articles found."
+    )
+
+
+
+# ------------------------------------------------
+# Display other sources
+# ------------------------------------------------
 
 st.divider()
 
+st.subheader(
+    "🌍 Other News Sources"
+)
 
-st.subheader("🌍 Other News Sources")
 
 news = load_news()
+
 
 if news:
 
@@ -123,7 +183,7 @@ if news:
             )
 
             st.caption(
-                f'{item["source"]} | {item.get("date","")}'
+                f'{item["source"]} | {item["date"]}'
             )
 
             st.markdown(
@@ -133,5 +193,5 @@ if news:
 else:
 
     st.info(
-        "No news available at the moment."
+        "No other news available."
     )
