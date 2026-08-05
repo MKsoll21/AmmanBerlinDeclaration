@@ -31,17 +31,28 @@ def get_disability_debrief():
 
         for entry in feed.entries[:3]:
 
-            articles.append(
-                {
-                    "title": entry.title,
-                    "link": entry.link,
-                    "source": "Disability Debrief",
-                    "date": entry.get(
-                        "published",
-                        ""
-                    )
-                }
-            )
+articles.append(
+    {
+        "title": entry.get(
+            "title",
+            "No title"
+        ),
+
+        "link": entry.get(
+            "link",
+            "#"
+        ),
+
+        "source": source["name"],
+
+        "category": source["category"],
+
+        "date": entry.get(
+            "published",
+            ""
+        )
+    }
+)
 
 
     except Exception as e:
